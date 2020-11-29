@@ -261,6 +261,9 @@ typedef lzap_network_get_native_t = Int8 Function();
 typedef lzap_network_get_t = int Function();
 typedef lzap_network_set_native_t = Int8 Function(Int8 networkByte);
 typedef lzap_network_set_t = int Function(int networkByte);
+typedef lzap_asset_id_get_t = Pointer<Utf8> Function();
+typedef lzap_asset_id_set_native_t = Int8 Function(Pointer<Utf8> assetId);
+typedef lzap_asset_id_set_t = int Function(Pointer<Utf8> assetId);
 
 typedef lzap_mnemonic_create_native_t = Int8 Function(Pointer<Utf8> output, Int32 size);
 typedef lzap_mnemonic_create_t = int Function(Pointer<Utf8> output, int size);
@@ -405,6 +408,12 @@ class LibZap {
     lzapNetworkSet = libzap
         .lookup<NativeFunction<lzap_network_set_native_t>>("lzap_network_set")
         .asFunction();
+    lzapAssetIdGet = libzap
+        .lookup<NativeFunction<lzap_asset_id_get_t>>("lzap_asset_id_get")
+        .asFunction();
+    lzapAssetIdSet = libzap
+        .lookup<NativeFunction<lzap_asset_id_set_native_t>>("lzap_asset_id_set")
+        .asFunction();
     lzapMnemonicCreate = libzap
         .lookup<NativeFunction<lzap_mnemonic_create_native_t>>("lzap_mnemonic_create")
         .asFunction();
@@ -449,6 +458,8 @@ class LibZap {
   lzap_node_get_t lzapNodeGet;
   lzap_network_get_t lzapNetworkGet;
   lzap_network_set_t lzapNetworkSet;
+  lzap_asset_id_get_t lzapAssetIdGet;
+  lzap_asset_id_set_t lzapAssetIdSet;
   lzap_mnemonic_create_t lzapMnemonicCreate;
   lzap_mnemonic_check_t lzapMnemonicCheck;
   lzap_mnemonic_wordlist_t lzapMnemonicWordlist;
@@ -509,6 +520,14 @@ class LibZap {
       networkByte = 'W';
     int char = networkByte.codeUnitAt(0);
     return lzapNetworkSet(char) != 0;
+  }
+
+  String assetIdGet() {
+    return Utf8.fromUtf8(lzapAssetIdGet());
+  }
+
+  bool assetIdSet(String value) {
+    return lzapAssetIdSet(Utf8.toUtf8(value)) != 0;
   }
 
   String mnemonicCreate() {
