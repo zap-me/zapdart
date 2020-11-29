@@ -530,6 +530,22 @@ class LibZap {
     return lzapAssetIdSet(Utf8.toUtf8(value)) != 0;
   }
 
+  bool networkParamsSet(String assetIdMainnet, String assetIdTestnet, bool testnet) {
+    if (!testnetSet(testnet))
+      return false;
+    if (testnet && assetIdTestnet != null) {
+      if (!assetIdSet(assetIdTestnet))
+        return false;
+    } else if (!testnet && assetIdMainnet != null) {
+      if (!assetIdSet(assetIdMainnet))
+        return false;
+    } else {
+      if (!assetIdSet(''))
+        return false;
+    }
+    return true;
+  }
+
   String mnemonicCreate() {
     var mem = "0" * 1024;
     var outputC = Utf8.toUtf8(mem);
