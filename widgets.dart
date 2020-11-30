@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flushbar/flushbar.dart';
 
-const zapgrey =         Color(0xFFF8F6F1);
-const zapblue =         Color(0xFF3765CB);
-const zapyellow =       Color(0xFFFFBB00);
-const zapgreen =        Color(0xFF009075);
-const zapwarning =      zapyellow;
-const zapwarninglight = Color(0x80FFBB00);
-const zapblackmed =     Colors.black54;
-const zapblacklight =   Colors.black38;
+import 'colors.dart';
 
 enum MessageCategory {
   Info,
   Warning,
 }
 
-Widget backButton(BuildContext context, {Color color = Colors.white}) {
+Widget backButton(BuildContext context, {Color color}) {
+  if (color == null)
+    color = ZapWhite;
   return IconButton(icon: Icon(Icons.arrow_back_ios, color: color), onPressed: () => Navigator.of(context).pop(false));
 }
 
@@ -31,11 +26,11 @@ void flushbarMsg(BuildContext context, String msg, {int seconds = 3, MessageCate
       break;
   }
   Flushbar(
-    messageText: Text(msg, style: TextStyle(color: zapblue)),
-    icon: Icon(icon, size: 28.0, color: category == MessageCategory.Info ? zapblue : zapwarning),
+    messageText: Text(msg, style: TextStyle(color: ZapBlue)),
+    icon: Icon(icon, size: 28.0, color: category == MessageCategory.Info ? ZapBlue : ZapWarning),
     duration: Duration(seconds: seconds),
-    leftBarIndicatorColor: zapblue,
-    backgroundColor: Colors.white,
+    leftBarIndicatorColor: ZapBlue,
+    backgroundColor: ZapWhite,
   )..show(context);
 }
 
@@ -106,12 +101,12 @@ class SquareButton extends StatelessWidget {
             ),
             child: Container(
               padding: EdgeInsets.all(30),
-              child: Icon(icon, color: Colors.white)
+              child: Icon(icon, color: ZapWhite)
             )
           ),
         ),
         SizedBox.fromSize(size: Size(1, 12)),
-        Text(title, style: TextStyle(fontSize: 10, color: zapblue))
+        Text(title, style: TextStyle(fontSize: 10, color: ZapBlue))
       ],
     );
   }
@@ -135,8 +130,8 @@ class ListButton extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Padding(padding: EdgeInsets.only(left: 16), child: Text(title, style: TextStyle(color: zapblackmed))),
-                Padding(padding: EdgeInsets.only(right: 8), child: Icon(Icons.chevron_right, color: zapblackmed))
+                Padding(padding: EdgeInsets.only(left: 16), child: Text(title, style: TextStyle(color: ZapBlackMed))),
+                Padding(padding: EdgeInsets.only(right: 8), child: Icon(Icons.chevron_right, color: ZapBlackMed))
             ])),
           Visibility(
             visible: last,
@@ -160,14 +155,14 @@ class AlertDrawer extends StatelessWidget {
       children: <Widget>[
         InkWell(
           onTap: onPressed,
-          child: Container(color: zapwarninglight,
+          child: Container(color: ZapWarningLight,
             child: Column(
               children: List<Widget>.generate(alerts.length, (index) {
                 return Container(
                   padding: EdgeInsets.all(8),
                   width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(border: Border(bottom: BorderSide(color: zapwarning))),
-                  child: Text(alerts[index], style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.black54))
+                  decoration: BoxDecoration(border: Border(bottom: BorderSide(color: ZapWarning))),
+                  child: Text(alerts[index], style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: ZapBlackMed))
                 );
               })
             )

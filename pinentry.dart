@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 
+import 'colors.dart';
+
 class PinEntryScreen extends StatefulWidget {
   final String _pin;
   final String _title;
@@ -54,9 +56,9 @@ class _PinEntryState extends State<PinEntryScreen> {
                   focusNode: focusNode,
                   hideCharacter: true,
                   highlight: true,
-                  highlightColor: Colors.blue,
-                  defaultBorderColor: Colors.black,
-                  hasTextBorderColor: Colors.green,
+                  highlightColor: ZapBlue,
+                  defaultBorderColor: ZapBlack,
+                  hasTextBorderColor: ZapGreen,
                   maxLength: _pinLength,
                   hasError: _hasError,
                   maskCharacter: "😎",
@@ -87,15 +89,15 @@ class _PinEntryState extends State<PinEntryScreen> {
                   pinTextStyle: TextStyle(fontSize: 30.0),
                   pinTextAnimatedSwitcherTransition: ProvidedPinBoxTextAnimation.scalingTransition,
                   pinTextAnimatedSwitcherDuration: Duration(milliseconds: 300),
-                  highlightAnimationBeginColor: Colors.black,
-                  highlightAnimationEndColor: Colors.white12,
+                  highlightAnimationBeginColor: ZapBlack,
+                  highlightAnimationEndColor: ZapWhite,
                   keyboardType: TextInputType.number,
                 ),
 
               ),
               Visibility(
                 visible: _hasError,
-                child: Text(_errorMessage, style: TextStyle(color: Colors.red),),
+                child: Text(_errorMessage, style: TextStyle(color: ZapRed),),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 32.0),
@@ -103,8 +105,8 @@ class _PinEntryState extends State<PinEntryScreen> {
                   alignment: WrapAlignment.spaceEvenly,
                   children: <Widget>[
                     MaterialButton(
-                      color: Colors.pink,
-                      textColor: Colors.white,
+                      color: ZapYellow,
+                      textColor: ZapWhite,
                       child: Text("Clear"),
                       onPressed: () {
                         controller.clear();
