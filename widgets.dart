@@ -113,11 +113,10 @@ class SquareButton extends StatelessWidget {
 }
 
 class ListButton extends StatelessWidget {
-  ListButton(this.onPressed, this.title, this.last) : super();
+  ListButton(this.onPressed, this.title) : super();
 
   final VoidCallback onPressed;
   final String title;
-  final bool last;
 
   @override
   Widget build(BuildContext context) {
@@ -133,13 +132,18 @@ class ListButton extends StatelessWidget {
                 Padding(padding: EdgeInsets.only(left: 16), child: Text(title, style: TextStyle(color: ZapBlackMed))),
                 Padding(padding: EdgeInsets.only(right: 8), child: Icon(Icons.chevron_right, color: ZapBlackMed))
             ])),
-          Visibility(
-            visible: last,
-            child: Divider()
-          )
         ],
       ),
     );
+  }
+}
+
+class ListButtonEnd extends StatelessWidget {
+  ListButtonEnd() : super();
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider();
   }
 }
 
