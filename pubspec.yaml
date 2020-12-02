@@ -1,0 +1,23 @@
+name: zapdart
+description: Library for ZAP flutter apps
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # for zapdart (remove when made into proper package)
+  edit_distance: ^0.4.1
+  pin_code_text_field: ^1.5.1
+  qr_flutter: 2.1.0+55
+  flushbar: 1.10.0
+  flutter_icons: ^1.0.0+1
+  encrypt: ^3.2.0
+  base58check: ^1.0.1
+  retry: ^3.0.0+1
