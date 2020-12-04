@@ -456,12 +456,17 @@ Future<bool> pinCheck(BuildContext context, String pin) async {
   return pin == pin2;
 }
 
-Future<http.Response> post(String url, String body, {Map<String, String> extraHeaders}) async {
-  var headers = {"Content-Type": "application/json"};
+Future<http.Response> post(String url, dynamic body, {String contentType = 'application/json', Map<String, String> extraHeaders}) async {
+  if (contentType != 'application/x-www-form-urlencoded' && contentType != 'application/json')
+    throw FormatException('content type not supported');
+  var headers = {'Content-Type': contentType};
   if (extraHeaders != null)
     for (var key in extraHeaders.keys) {
       headers[key] = extraHeaders[key];
     }
+  // http.post will url encode params automatically for application/x-www-form-urlencoded
+  if (body is Map<String, String> && contentType == 'application/json')
+      body = jsonEncode(body);
   var r = RetryOptions(maxAttempts: 4);
   return await r.retry(
     () => http.post(url, headers: headers, body: body),
