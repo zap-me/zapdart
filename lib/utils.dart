@@ -473,3 +473,11 @@ Future<http.Response> post(String url, dynamic body, {String contentType = 'appl
     retryIf: (e) => e is SocketException || e is TimeoutException,
   );
 }
+
+Future<http.Response> get_(String url, {Map<String, String> extraHeaders}) async {
+  var r = RetryOptions(maxAttempts: 4);
+  return await r.retry(
+    () => http.get(url, headers: extraHeaders),
+    retryIf: (e) => e is SocketException || e is TimeoutException,
+  );
+}
