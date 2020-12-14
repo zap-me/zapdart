@@ -162,13 +162,13 @@ void showAlertDialog(BuildContext context, String msg) {
   );
 }
 
-Future<void> alert(BuildContext context, String title, String msg) {
+Future<void> alert(BuildContext context, String title, dynamic content) {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text(title),
-        content: Text(msg),
+        content: content is Widget ? content : Text('$content'),
         actions: <Widget>[
           FlatButton(
             child: Text("Ok"),
