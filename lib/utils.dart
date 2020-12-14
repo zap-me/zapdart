@@ -465,7 +465,7 @@ Future<http.Response> post(String url, dynamic body, {String contentType = 'appl
       headers[key] = extraHeaders[key];
     }
   // http.post will url encode params automatically for application/x-www-form-urlencoded
-  if (body is Map<String, String> && contentType == 'application/json')
+  if (body is! String && contentType == 'application/json')
       body = jsonEncode(body);
   var r = RetryOptions(maxAttempts: 4);
   return await r.retry(
