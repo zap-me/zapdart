@@ -257,6 +257,8 @@ typedef lzap_version_native_t = Int32 Function();
 typedef lzap_version_t = int Function();
 
 typedef lzap_node_get_t = Pointer<Utf8> Function();
+typedef lzap_node_set_native_t = Int8 Function(Pointer<Utf8> url);
+typedef lzap_node_set_t = int Function(Pointer<Utf8> url);
 typedef lzap_network_get_native_t = Int8 Function();
 typedef lzap_network_get_t = int Function();
 typedef lzap_network_set_native_t = Int8 Function(Int8 networkByte);
@@ -402,6 +404,9 @@ class LibZap {
     lzapNodeGet = libzap
         .lookup<NativeFunction<lzap_node_get_t>>("lzap_node_get")
         .asFunction();
+    lzapNodeSet = libzap
+        .lookup<NativeFunction<lzap_node_set_native_t>>("lzap_node_set")
+        .asFunction();
     lzapNetworkGet = libzap
         .lookup<NativeFunction<lzap_network_get_native_t>>("lzap_network_get")
         .asFunction();
@@ -456,6 +461,7 @@ class LibZap {
   DynamicLibrary libzap;
   lzap_version_t lzapVersion;
   lzap_node_get_t lzapNodeGet;
+  lzap_node_set_t lzapNodeSet;
   lzap_network_get_t lzapNetworkGet;
   lzap_network_set_t lzapNetworkSet;
   lzap_asset_id_get_t lzapAssetIdGet;
@@ -502,6 +508,10 @@ class LibZap {
     return Utf8.fromUtf8(lzapNodeGet());
   }
 
+  bool nodeSet(String url) {
+    return lzapNodeSet(Utf8.toUtf8(url)) != 0;
+  }
+
   bool testnetGet() {
     var networkByte = String.fromCharCode(lzapNetworkGet());
     if (networkByte == 'T')
@@ -530,20 +540,39 @@ class LibZap {
     return lzapAssetIdSet(Utf8.toUtf8(value)) != 0;
   }
 
-  bool networkParamsSet(String assetIdMainnet, String assetIdTestnet, bool testnet) {
+bool networkParamsSet(String assetIdMainnet, String assetIdTestnet, String nodeUrlMainnet, String nodeUrlTestnet, bool testnet) {
+    var result = true;
+    print('testnetSet($testnet)..');
     if (!testnetSet(testnet))
-      return false;
+      result =  false;
     if (testnet && assetIdTestnet != null) {
+      print('assetIdSet("$assetIdTestnet")..');
       if (!assetIdSet(assetIdTestnet))
-        return false;
+        result =  false;
     } else if (!testnet && assetIdMainnet != null) {
+      print('assetIdSet("$assetIdMainnet")..');
       if (!assetIdSet(assetIdMainnet))
-        return false;
+        result =  false;
     } else {
+      print('assetIdSet("")..');
       if (!assetIdSet(''))
-        return false;
+        result =  false;
     }
-    return true;
+    if (testnet && nodeUrlTestnet != null) {
+      print('nodeSet("$nodeUrlTestnet")..');
+      if (!nodeSet(nodeUrlTestnet))
+        result =  false;
+    } else if (!testnet && nodeUrlMainnet != null) {
+      print('nodeSet("$nodeUrlMainnet")..');
+      if (!nodeSet(nodeUrlMainnet))
+        result =  false;
+    } else {
+      print('nodeSet("")..');
+      if (!nodeSet(''))
+        result =  false;
+    }
+    print('networkParamsSet = $result');
+    return result;
   }
 
   String mnemonicCreate() {
