@@ -59,6 +59,10 @@ class WavesRequest {
   final int error;
 
   WavesRequest(this.address, this.assetId, this.amount, this.attachment, this.error);
+
+  String toUri() {
+    return 'waves://$address?asset=$assetId&amount=$amount&attachment=$attachment';
+  }
 }
 
 WavesRequest parseWavesUri(bool testnet, String uri) {
