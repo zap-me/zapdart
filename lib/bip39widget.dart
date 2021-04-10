@@ -34,13 +34,13 @@ class Bip39Words extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var rows = List<List<String>>();
-    var row = List<String>();
+    var rows = <List<String>>[];
+    var row = <String>[];
     for (var word in words) {
       row.add(word);
       if (row.length >= rowSize) {
         rows.add(row);
-        row = List<String>();
+        row = <String>[];
       }
     }
     if (row.length > 0)
@@ -52,7 +52,7 @@ class Bip39Words extends StatelessWidget {
           return Container(
             width: 65, height: 30, padding: EdgeInsets.all(1),
             child: ButtonTheme(buttonColor: validBip39 ? ZapGreen.withAlpha(198) : ZapWhite, padding: EdgeInsets.all(2),
-              child: RaisedButton(
+              child: ElevatedButton(
                 child: Row(children: [
                   Text(' ${rowIndex * rowSize + index + 1}', style: TextStyle(color: ZapBlackLight, fontSize: 8)),
                   Expanded(
@@ -79,7 +79,7 @@ class _Bip39EntryState extends State<Bip39Entry> {
   var _textController = TextEditingController();
   var _levenshtein = Levenshtein();
   List<String> _wordlist = LibZap().mnemonicWordlist();
-  List<String> _mnemonicWords = List<String>();
+  List<String> _mnemonicWords = <String>[];
   var _candidates = ['', '', ''];
   var _validBip39 = false;
 
@@ -102,10 +102,8 @@ class _Bip39EntryState extends State<Bip39Entry> {
     value = value.toLowerCase();
 
     // initialize our potential candidate variables
-    var c = List<String>(_candidates.length);
-    c.forEachIndex((e, i) => c[i] = '');
-    var d = List<double>(_candidates.length);
-    d.forEachIndex((e, i) => d[i] = 1.0);
+    var c = List<String>.generate(_candidates.length, (_) => '');
+    var d = List<double>.generate(_candidates.length, (_) => 1.0);
     var prefixMatched = 0;
 
     for (var item in _wordlist) {
@@ -202,7 +200,7 @@ class _Bip39EntryState extends State<Bip39Entry> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List<Widget>.generate(_candidates.length, (index) {
             return ButtonTheme(minWidth: 40, height: 25, buttonColor: ZapYellow.withAlpha(198),
-              child: RaisedButton(child: Text(_candidates[index]), onPressed: () => chooseWord(_candidates[index]))
+              child: ElevatedButton(child: Text(_candidates[index]), onPressed: () => chooseWord(_candidates[index]))
             ); 
           })
         ),

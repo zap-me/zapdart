@@ -37,7 +37,7 @@ class MarketDepth {
 Future<Decimal> equivalentZapForNzd(Decimal nzdReqOrProvided, Side zapSide) async {
   var url = baseUrl + "MarketDepth";
   var body = convert.jsonEncode({"market": "ZAPNZD", "merge": "0.01"});
-  var response = await post(url, body);
+  var response = await httpPost(Uri.parse(url), body);
   if (response.statusCode == 200) {
     var marketDepth = MarketDepth.fromJson(convert.json.decode(response.body));
     var amountZap = Decimal.fromInt(0);

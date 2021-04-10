@@ -174,7 +174,7 @@ Future<void> alert(BuildContext context, String title, dynamic content) {
         title: Text(title),
         content: content is Widget ? content : Text('$content'),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text("Ok"),
             onPressed: () {
               Navigator.of(context).pop();
@@ -216,11 +216,11 @@ Future<String> askString(BuildContext context, String title, String value) {
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                RaisedButton.icon(
+                ElevatedButton.icon(
                     onPressed: () { Navigator.pop(context); },
                     icon: Icon(Icons.cancel),
                     label: Text('Cancel')),
-                RaisedButton.icon(
+                ElevatedButton.icon(
                     onPressed: submit,
                     icon: Icon(Icons.send),
                     label: Text('Submit')),
@@ -289,11 +289,11 @@ Future<String> askSetMnemonicPassword(BuildContext context) async {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              RaisedButton.icon(
+              ElevatedButton.icon(
                   onPressed: () { Navigator.pop(context); },
                   icon: Icon(Icons.cancel),
                   label: Text('Cancel')),
-              RaisedButton.icon(
+              ElevatedButton.icon(
                   onPressed: submit,
                   icon: Icon(Icons.lock),
                   label: Text('Submit')),
@@ -346,11 +346,11 @@ Future<String> askMnemonicPassword(BuildContext context) async {
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                RaisedButton.icon(
+                ElevatedButton.icon(
                     onPressed: () { Navigator.pop(context); },
                     icon: Icon(Icons.cancel),
                     label: Text('Cancel')),
-                RaisedButton.icon(
+                ElevatedButton.icon(
                     onPressed: submit,
                     icon: Icon(Icons.lock),
                     label: Text('Submit')),
@@ -381,11 +381,11 @@ Future<bool> askYesNo(BuildContext context, String question) async {
         content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              RaisedButton.icon(
+              ElevatedButton.icon(
                   onPressed: () { Navigator.pop(context, false); },
                   icon: Icon(Icons.cancel),
                   label: Text('No')),
-              RaisedButton.icon(
+              ElevatedButton.icon(
                   onPressed: () { Navigator.pop(context, true); },
                   icon: Icon(Icons.check),
                   label: Text('Yes')),
@@ -403,7 +403,7 @@ class EncryptedMnemonic {
 }
 
 Key padKey256(Key key) {
-  var bytes = List<int>();
+  var bytes = <int>[];
   for (var byte in key.bytes)
     bytes.add(byte);
   while (bytes.length < 256/8)
@@ -460,7 +460,7 @@ Future<bool> pinCheck(BuildContext context, String pin) async {
   return pin == pin2;
 }
 
-Future<http.Response> post(String url, dynamic body, {String contentType = 'application/json', Map<String, String> extraHeaders}) async {
+Future<http.Response> httpPost(Uri uri, dynamic body, {String contentType = 'application/json', Map<String, String> extraHeaders}) async {
   if (contentType != 'application/x-www-form-urlencoded' && contentType != 'application/json')
     throw FormatException('content type not supported');
   var headers = {'Content-Type': contentType};
@@ -473,15 +473,15 @@ Future<http.Response> post(String url, dynamic body, {String contentType = 'appl
       body = jsonEncode(body);
   var r = RetryOptions(maxAttempts: 4);
   return await r.retry(
-    () => http.post(url, headers: headers, body: body),
+    () => http.post(uri, headers: headers, body: body),
     retryIf: (e) => e is SocketException || e is TimeoutException,
   );
 }
 
-Future<http.Response> get_(String url, {Map<String, String> extraHeaders}) async {
+Future<http.Response> httpGet(Uri uri, {Map<String, String> extraHeaders}) async {
   var r = RetryOptions(maxAttempts: 4);
   return await r.retry(
-    () => http.get(url, headers: extraHeaders),
+    () => http.get(uri, headers: extraHeaders),
     retryIf: (e) => e is SocketException || e is TimeoutException,
   );
 }

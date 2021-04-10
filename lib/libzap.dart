@@ -18,10 +18,7 @@ void copyInto(Pointer<Uint8> buf, int offset, Iterable<int> data) {
 /// Read the buffer from C memory into Dart.
 List<int> toIntList(Pointer<Uint8> buf, int len) {
   if (buf == nullptr) return null;
-  List<int> data = List(len);
-  for (int i = 0; i < len; ++i)
-    data[i] = buf.elementAt(i).value;
-  return data;
+  return List<int>.generate(len, (i) => buf.elementAt(i).value);
 }
 
 class IntResult {
@@ -49,7 +46,7 @@ class Tx {
   Tx(this.type, this.id, this.sender, this.recipient, this.assetId, this.feeAsset, this.attachment, this.amount, this.fee, this.timestamp);
 
   Pointer<Uint8> toBuffer() {
-    var buf = allocate<Uint8>(count: totalSize);
+    var buf = calloc<Uint8>(totalSize);
     var offset = 0;
     var intList = new Uint8List(int64FieldSize);
     var intByteData = new ByteData.view(intList.buffer);
@@ -121,17 +118,14 @@ class Tx {
   }
 
   static Iterable<Tx> fromBufferMulti(Pointer<Uint8> buf, int count) {
-    var res = List<Tx>();
-    for (int i=0; i < count; i++) {
-      var offset = i * totalSize;
-      var tx = fromBuffer(buf.elementAt(offset));
-      res.add(tx);
-    }
-    return res;
+    return List<Tx>.generate(count, (index) {
+      var offset = index * totalSize;
+      return fromBuffer(buf.elementAt(offset));
+    });
   }
 
   static Pointer<Uint8> allocateMem({int count=1}) {
-    return allocate<Uint8>(count: totalSize * count);
+    return calloc<Uint8>(totalSize * count);
   }
 
   Map<String, dynamic> toJson() =>
@@ -162,7 +156,7 @@ class SpendTx {
   SpendTx(this.success, this.data, this.signature);
 
   Pointer<Uint8> toBuffer() {
-    var buf = allocate<Uint8>(count: totalSize);
+    var buf = calloc<Uint8>(totalSize);
 
     // success field
     var int32List = new Uint8List(int32FieldSize);
@@ -193,7 +187,7 @@ class SpendTx {
   }
 
   static Pointer<Uint8> allocateMem() {
-    return allocate<Uint8>(count: totalSize);
+    return calloc<Uint8>(totalSize);
   }
 }
 
@@ -217,7 +211,7 @@ class Signature {
   }
 
   static Pointer<Uint8> allocateMem() {
-    return allocate<Uint8>(count: totalSize);
+    return calloc<Uint8>(totalSize);
   }
 }
 
@@ -233,7 +227,7 @@ class IntResultNative extends Struct {
   int value;
 
   factory IntResultNative(bool success, int value) {
-    return allocate<IntResultNative>().ref
+    return calloc<IntResultNative>().ref
       ..success = (success ? 1 : 0)
       ..value = value;
   }
@@ -248,10 +242,9 @@ struct waves_payment_request_t
   char attachment[MAX_TXFIELD];
   uint64_t amount;
 };
-*/
 class WavesPaymentRequestNative extends Struct {
-  //TODO
 }
+*/
 
 typedef lzap_version_native_t = Int32 Function();
 typedef lzap_version_t = int Function();
@@ -303,8 +296,8 @@ typedef lzap_transaction_broadcast_ns_native_t = Int32 Function(Pointer<Uint8> s
 typedef lzap_transaction_broadcast_ns_t = int Function(Pointer<Uint8> spendTx, Pointer<Uint8> broadcastTxOut);
 
 //TODO: ns version of transaction broadcast!!!
-typedef lzap_message_sign_ns_native_t = Int32 Function(Pointer<Utf8> seed, Pointer<Uint8> message, Int32 message_sz, Pointer<Uint8> signatureOut);
-typedef lzap_message_sign_ns_t = int Function(Pointer<Utf8> seed, Pointer<Uint8> message, int message_sz, Pointer<Uint8> signatureOut);
+typedef lzap_message_sign_ns_native_t = Int32 Function(Pointer<Utf8> seed, Pointer<Uint8> message, Int32 messageSize, Pointer<Uint8> signatureOut);
+typedef lzap_message_sign_ns_t = int Function(Pointer<Utf8> seed, Pointer<Uint8> message, int messageSize, Pointer<Uint8> signatureOut);
 
 //
 // helper functions
@@ -323,12 +316,12 @@ IntResult addressBalanceFromIsolate(String address) {
   // to get the function pointer as closures can not be passed to isolates
   var libzap = LibZap();
 
-  var addrC = Utf8.toUtf8(address);
-  var balanceP = allocate<Int64>();
+  var addrC = address.toNativeUtf8();
+  var balanceP = calloc<Int64>();
   var res = libzap.lzapAddressBalance(addrC, balanceP) != 0;
   int balance = balanceP.value;
-  free(balanceP);
-  free(addrC);
+  calloc.free(balanceP);
+  calloc.free(addrC);
   return IntResult(res, balance);
 }
 
@@ -343,22 +336,22 @@ Iterable<Tx> addressTransactionsFromIsolate(AddrTxsRequest req) {
   // to get the function pointer as closures can not be passed to isolates
   var libzap = LibZap();
 
-  var addrC = Utf8.toUtf8(req.address);
+  var addrC = req.address.toNativeUtf8();
   var txsC = Tx.allocateMem(count: req.count);
   Pointer afterC = nullptr;
   if (req.after != null)
-    afterC = Utf8.toUtf8(req.after);
-  var countOutP = allocate<Int64>();
+    afterC = req.after.toNativeUtf8();
+  var countOutP = calloc<Int64>();
   var res = libzap.lzapAddressTransactions(addrC, txsC, req.count, afterC.cast<Utf8>(), countOutP) != 0;
   Iterable<Tx> txs;
   if (res) {
     int count = countOutP.value;
     txs = Tx.fromBufferMulti(txsC, count);
   }
-  free(countOutP);
-  free(afterC);
-  free(txsC);
-  free(addrC);
+  calloc.free(countOutP);
+  calloc.free(afterC);
+  calloc.free(txsC);
+  calloc.free(addrC);
   return txs;
 }
 
@@ -367,10 +360,10 @@ IntResult transactionFeeFromIsolate(int _dummy) {
   // to get the function pointer as closures can not be passed to isolates
   var libzap = LibZap();
 
-  var feeP = allocate<Int64>();
+  var feeP = calloc<Int64>();
   var res = libzap.lzapTransactionFee(feeP) != 0;
   int fee = feeP.value;
-  free(feeP);
+  calloc.free(feeP);
   return IntResult(res, fee);
 }
 
@@ -385,8 +378,8 @@ Tx transactionBroadcastFromIsolate(SpendTx spendTx) {
   Tx tx;
   if (result != 0)
     tx = Tx.fromBuffer(txC);
-  free(txC);
-  free(spendTxC);
+  calloc.free(txC);
+  calloc.free(spendTxC);
   return tx;
 }
 
@@ -505,11 +498,14 @@ class LibZap {
   }
 
   String nodeGet() {
-    return Utf8.fromUtf8(lzapNodeGet());
+    return lzapNodeGet().toDartString();
   }
 
   bool nodeSet(String url) {
-    return lzapNodeSet(Utf8.toUtf8(url)) != 0;
+    var urlC = url.toNativeUtf8();
+    var res = lzapNodeSet(urlC) != 0;
+    calloc.free(urlC);
+    return res;
   }
 
   bool testnetGet() {
@@ -533,11 +529,14 @@ class LibZap {
   }
 
   String assetIdGet() {
-    return Utf8.fromUtf8(lzapAssetIdGet());
+    return lzapAssetIdGet().toDartString();
   }
 
   bool assetIdSet(String value) {
-    return lzapAssetIdSet(Utf8.toUtf8(value)) != 0;
+    var valueC = value.toNativeUtf8();
+    var res = lzapAssetIdSet(valueC) != 0;
+    calloc.free(valueC);
+    return res;
   }
 
 bool networkParamsSet(String assetIdMainnet, String assetIdTestnet, String nodeUrlMainnet, String nodeUrlTestnet, bool testnet) {
@@ -577,47 +576,47 @@ bool networkParamsSet(String assetIdMainnet, String assetIdTestnet, String nodeU
 
   String mnemonicCreate() {
     var mem = "0" * 1024;
-    var outputC = Utf8.toUtf8(mem);
+    var outputC = mem.toNativeUtf8();
     var res = lzapMnemonicCreate(outputC, 1024);
-    var mnemonic = Utf8.fromUtf8(outputC);
-    free(outputC);
+    var mnemonic = outputC.toDartString();
+    calloc.free(outputC);
     if (res != 0)
       return mnemonic;
     return null;
   }
 
   bool mnemonicCheck(String mnemonic) {
-    var mnemonicC = Utf8.toUtf8(mnemonic);
+    var mnemonicC = mnemonic.toNativeUtf8();
     var res = lzapMnemonicCheck(mnemonicC) != 0;
-    free(mnemonicC);
+    calloc.free(mnemonicC);
     return res;
   }
 
   List<String> mnemonicWordlist() {
-    var wordlist = List<String>();
+    var wordlist = <String>[];
     var wordC = lzapMnemonicWordlist();
     while (wordC.value.address != 0) {
-      wordlist.add(Utf8.fromUtf8(wordC.value));
+      wordlist.add(wordC.value.toDartString());
       wordC = wordC.elementAt(1);
     }
     return wordlist;
   }
 
   String seedAddress(String seed) {
-    var seedC = Utf8.toUtf8(seed);
+    var seedC = seed.toNativeUtf8();
     var mem = "0" * 1024;
-    var outputC = Utf8.toUtf8(mem);
+    var outputC = mem.toNativeUtf8();
     lzapSeedAddress(seedC, outputC);
-    var address = Utf8.fromUtf8(outputC);
-    free(outputC);
-    free(seedC);
+    var address = outputC.toDartString();
+    calloc.free(outputC);
+    calloc.free(seedC);
     return address;
   }
 
   bool addressCheck(String address) {
-    var addrC = Utf8.toUtf8(address);
+    var addrC = address.toNativeUtf8();
     var res = lzapAddressCheck(addrC) != 0;
-    free(addrC);
+    calloc.free(addrC);
     return res;
   }
 
@@ -634,18 +633,18 @@ bool networkParamsSet(String assetIdMainnet, String assetIdTestnet, String nodeU
   }
 
   SpendTx transactionCreate(String seed, String recipient, int amount, int fee, String attachment) {
-    var seedC = Utf8.toUtf8(seed);
-    var recipientC = Utf8.toUtf8(recipient);
+    var seedC = seed.toNativeUtf8();
+    var recipientC = recipient.toNativeUtf8();
     if (attachment == null)
       attachment = "";
-    var attachmentC = Utf8.toUtf8(attachment);
+    var attachmentC = attachment.toNativeUtf8();
     var outputC = SpendTx.allocateMem();
     lzapTransactionCreate(seedC, recipientC, amount, fee, attachmentC, outputC);
     var spendTx = SpendTx.fromBuffer(outputC);
-    free(outputC);
-    free(attachmentC);
-    free(recipientC);
-    free(seedC);
+    calloc.free(outputC);
+    calloc.free(attachmentC);
+    calloc.free(recipientC);
+    calloc.free(seedC);
     return spendTx;
   }
 
@@ -654,15 +653,15 @@ bool networkParamsSet(String assetIdMainnet, String assetIdTestnet, String nodeU
   }
 
   Signature messageSign(String seed, Iterable<int> message) {
-    var seedC = Utf8.toUtf8(seed);
-    var messageC = allocate<Uint8>(count: message.length);
+    var seedC = seed.toNativeUtf8();
+    var messageC = calloc<Uint8>(message.length);
     copyInto(messageC, 0, message);
     var outputC = Signature.allocateMem();
     lzapMessageSign(seedC, messageC, message.length, outputC);
     var signature = Signature.fromBuffer(outputC);
-    free(outputC);
-    free(messageC);
-    free(seedC);
+    calloc.free(outputC);
+    calloc.free(messageC);
+    calloc.free(seedC);
     return signature;
   }
 }

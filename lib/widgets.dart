@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 import 'colors.dart';
 
@@ -51,13 +51,13 @@ class RoundedButton extends StatelessWidget {
     var _borderColor = borderColor != null ? borderColor : fillColor;
     var shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: _borderColor));
     Widget text = Text(title, style: TextStyle(color: textColor, fontSize: 14));
-    RaisedButton btn;
+    ElevatedButton btn;
     if (icon != null && holePunch)
       throw ArgumentError('Can only use "icon" parameter OR "fwdArrowColor"');
     if (icon != null)
-      btn = RaisedButton.icon(onPressed: onPressed,
+      btn = ElevatedButton.icon(onPressed: onPressed,
         icon: Icon(icon, color: textColor, size: 14), label: text,
-        shape: shape, color: fillColor);
+        style: ElevatedButton.styleFrom(shape: shape, primary: fillColor));
     else {
       Widget child = text;
       if (holePunch) {
@@ -68,9 +68,9 @@ class RoundedButton extends StatelessWidget {
          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[SizedBox(width: 14), text, icon]));
       }
-      btn = RaisedButton(onPressed: onPressed,
+      btn = ElevatedButton(onPressed: onPressed,
         child: child,
-        shape: shape, color: fillColor);
+        style: ElevatedButton.styleFrom(shape: shape, primary: fillColor));
     }
     if (minWidth != null)
       return ButtonTheme(minWidth: minWidth, child: btn);
