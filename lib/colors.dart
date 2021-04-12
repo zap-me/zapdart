@@ -20,10 +20,10 @@ Color ZapBlackLight =   Colors.black38;
 
 TextThemer ZapTextThemer = GoogleFonts.oxygenTextTheme;
 
-void overrideTheme({Brightness zapBrightness,
-  Color zapWhite, Color zapGrey, Color zapBlue, Color zapYellow, Color zapGreen, Color zapRed,
-  Color zapWarning, Color zapWarningLight, Color zapBlack, Color zapBlackMed, Color zapBlackLight,
-  TextThemer zapTextThemer}) {
+void overrideTheme({Brightness? zapBrightness,
+  Color? zapWhite, Color? zapGrey, Color? zapBlue, Color? zapYellow, Color? zapGreen, Color? zapRed,
+  Color? zapWarning, Color? zapWarningLight, Color? zapBlack, Color? zapBlackMed, Color? zapBlackLight,
+  TextThemer? zapTextThemer}) {
   // brightness
   if (zapBrightness != null)
     ZapBrightness = zapBrightness;

@@ -17,7 +17,7 @@ void copyInto(Pointer<Uint8> buf, int offset, Iterable<int> data) {
 
 /// Read the buffer from C memory into Dart.
 List<int> toIntList(Pointer<Uint8> buf, int len) {
-  if (buf == nullptr) return null;
+  if (buf == nullptr) return [];
   return List<int>.generate(len, (i) => buf.elementAt(i).value);
 }
 
@@ -38,7 +38,7 @@ class Tx {
   String recipient;
   String assetId;
   String feeAsset;
-  String attachment;
+  String? attachment;
   int amount;
   int fee;
   int timestamp;
@@ -71,17 +71,18 @@ class Tx {
     copyInto(buf, offset, utf8.encode(feeAsset));
     offset += textFieldSize;
     // attachment field
-    copyInto(buf, offset, utf8.encode(attachment));
+    if (attachment != null)
+      copyInto(buf, offset, utf8.encode(attachment!));
     offset += textFieldSize;
     // amount field
     intByteData.setInt64(0, amount);
     copyInto(buf, offset, intList);
     offset += int64FieldSize;
-    // amount field
+    // fee field
     intByteData.setInt64(0, fee);
     copyInto(buf, offset, intList);
     offset += int64FieldSize;
-    // amount field
+    // timestamp field
     intByteData.setInt64(0, timestamp);
     copyInto(buf, offset, intList);
     offset += int64FieldSize;
@@ -219,6 +220,7 @@ class Signature {
 // native libzap definitions
 //
 
+/*
 class IntResultNative extends Struct {
   @Int32()
   int success;
@@ -232,6 +234,7 @@ class IntResultNative extends Struct {
       ..value = value;
   }
 }
+*/
 
 /* c def
 #define MAX_TXFIELD 1024
@@ -328,7 +331,7 @@ IntResult addressBalanceFromIsolate(String address) {
 class AddrTxsRequest {
   String address;
   int count;
-  String after;
+  String? after;
   AddrTxsRequest(this.address, this.count, this.after);
 }
 Iterable<Tx> addressTransactionsFromIsolate(AddrTxsRequest req) {
@@ -338,24 +341,25 @@ Iterable<Tx> addressTransactionsFromIsolate(AddrTxsRequest req) {
 
   var addrC = req.address.toNativeUtf8();
   var txsC = Tx.allocateMem(count: req.count);
-  Pointer afterC = nullptr;
+  Pointer<Utf8> afterC = nullptr;
   if (req.after != null)
-    afterC = req.after.toNativeUtf8();
+    afterC = req.after!.toNativeUtf8();
   var countOutP = calloc<Int64>();
-  var res = libzap.lzapAddressTransactions(addrC, txsC, req.count, afterC.cast<Utf8>(), countOutP) != 0;
-  Iterable<Tx> txs;
+  var res = libzap.lzapAddressTransactions(addrC, txsC, req.count, afterC, countOutP) != 0;
+  Iterable<Tx> txs = [];
   if (res) {
     int count = countOutP.value;
     txs = Tx.fromBufferMulti(txsC, count);
   }
   calloc.free(countOutP);
-  calloc.free(afterC);
+  if (req.after != null)
+    calloc.free(afterC);
   calloc.free(txsC);
   calloc.free(addrC);
   return txs;
 }
 
-IntResult transactionFeeFromIsolate(int _dummy) {
+IntResult transactionFeeFromIsolate(int dummy) {
   // as we are running this in an isolate we need to reinit a LibZap instance
   // to get the function pointer as closures can not be passed to isolates
   var libzap = LibZap();
@@ -367,7 +371,7 @@ IntResult transactionFeeFromIsolate(int _dummy) {
   return IntResult(res, fee);
 }
 
-Tx transactionBroadcastFromIsolate(SpendTx spendTx) {
+Tx? transactionBroadcastFromIsolate(SpendTx spendTx) {
   // as we are running this in an isolate we need to reinit a LibZap instance
   // to get the function pointer as closures can not be passed to isolates
   var libzap = LibZap();
@@ -375,7 +379,7 @@ Tx transactionBroadcastFromIsolate(SpendTx spendTx) {
   var spendTxC = spendTx.toBuffer();
   var txC = Tx.allocateMem();
   var result = libzap.lzapTransactionBroadcast(spendTxC, txC);
-  Tx tx;
+  Tx? tx;
   if (result != 0)
     tx = Tx.fromBuffer(txC);
   calloc.free(txC);
@@ -451,27 +455,27 @@ class LibZap {
   static const String TESTNET_ASSET_ID = "CgUrFtinLXEbJwJVjwwcppk4Vpz1nMmR3H5cQaDcUcfe";
   static const String MAINNET_ASSET_ID = "9R3iLi4qGLVWKc16Tg98gmRvgg1usGEYd7SgC1W5D6HB";
 
-  DynamicLibrary libzap;
-  lzap_version_t lzapVersion;
-  lzap_node_get_t lzapNodeGet;
-  lzap_node_set_t lzapNodeSet;
-  lzap_network_get_t lzapNetworkGet;
-  lzap_network_set_t lzapNetworkSet;
-  lzap_asset_id_get_t lzapAssetIdGet;
-  lzap_asset_id_set_t lzapAssetIdSet;
-  lzap_mnemonic_create_t lzapMnemonicCreate;
-  lzap_mnemonic_check_t lzapMnemonicCheck;
-  lzap_mnemonic_wordlist_t lzapMnemonicWordlist;
-  lzap_seed_address_t lzapSeedAddress;
-  lzap_address_check_ns_t lzapAddressCheck;
-  lzap_address_balance_ns_t lzapAddressBalance;
-  lzap_address_transactions2_ns_t lzapAddressTransactions;
-  lzap_transaction_Fee_ns_t lzapTransactionFee;
-  lzap_transaction_create_ns_t lzapTransactionCreate;
-  lzap_transaction_broadcast_ns_t lzapTransactionBroadcast;
-  lzap_message_sign_ns_t lzapMessageSign;
+  late DynamicLibrary libzap;
+  late lzap_version_t lzapVersion;
+  late lzap_node_get_t lzapNodeGet;
+  late lzap_node_set_t lzapNodeSet;
+  late lzap_network_get_t lzapNetworkGet;
+  late lzap_network_set_t lzapNetworkSet;
+  late lzap_asset_id_get_t lzapAssetIdGet;
+  late lzap_asset_id_set_t lzapAssetIdSet;
+  late lzap_mnemonic_create_t lzapMnemonicCreate;
+  late lzap_mnemonic_check_t lzapMnemonicCheck;
+  late lzap_mnemonic_wordlist_t lzapMnemonicWordlist;
+  late lzap_seed_address_t lzapSeedAddress;
+  late lzap_address_check_ns_t lzapAddressCheck;
+  late lzap_address_balance_ns_t lzapAddressBalance;
+  late lzap_address_transactions2_ns_t lzapAddressTransactions;
+  late lzap_transaction_Fee_ns_t lzapTransactionFee;
+  late lzap_transaction_create_ns_t lzapTransactionCreate;
+  late lzap_transaction_broadcast_ns_t lzapTransactionBroadcast;
+  late lzap_message_sign_ns_t lzapMessageSign;
 
-  static String paymentUri(bool testnet, String address, int amount, String deviceName) {
+  static String paymentUri(bool testnet, String address, int? amount, String? deviceName) {
     var uri = "waves://$address?asset=${testnet ? TESTNET_ASSET_ID : MAINNET_ASSET_ID}";
     if (amount != null)
       uri += "&amount=$amount";
@@ -480,7 +484,7 @@ class LibZap {
     return uri;
   }
 
-  static String paymentUriDec(bool testnet, String address, Decimal amount, String deviceName) {
+  static String paymentUriDec(bool testnet, String address, Decimal? amount, String? deviceName) {
     if (amount != null && amount > Decimal.fromInt(0)) {
       amount = amount * Decimal.fromInt(100);
       var amountInt = amount.toInt();
@@ -539,7 +543,7 @@ class LibZap {
     return res;
   }
 
-bool networkParamsSet(String assetIdMainnet, String assetIdTestnet, String nodeUrlMainnet, String nodeUrlTestnet, bool testnet) {
+bool networkParamsSet(String? assetIdMainnet, String? assetIdTestnet, String? nodeUrlMainnet, String? nodeUrlTestnet, bool testnet) {
     var result = true;
     print('testnetSet($testnet)..');
     if (!testnetSet(testnet))
@@ -574,7 +578,7 @@ bool networkParamsSet(String assetIdMainnet, String assetIdTestnet, String nodeU
     return result;
   }
 
-  String mnemonicCreate() {
+  String? mnemonicCreate() {
     var mem = "0" * 1024;
     var outputC = mem.toNativeUtf8();
     var res = lzapMnemonicCreate(outputC, 1024);
@@ -624,15 +628,15 @@ bool networkParamsSet(String assetIdMainnet, String assetIdTestnet, String nodeU
     return compute(addressBalanceFromIsolate, address);
   }
 
-  static Future<Iterable<Tx>> addressTransactions(String address, int count, String after) async {
+  static Future<Iterable<Tx>> addressTransactions(String address, int count, String? after) async {
     return compute(addressTransactionsFromIsolate, AddrTxsRequest(address, count, after));
   }
 
   static Future<IntResult> transactionFee() async {
-    return compute(transactionFeeFromIsolate, null);
+    return compute(transactionFeeFromIsolate, 0);
   }
 
-  SpendTx transactionCreate(String seed, String recipient, int amount, int fee, String attachment) {
+  SpendTx transactionCreate(String seed, String recipient, int amount, int fee, String? attachment) {
     var seedC = seed.toNativeUtf8();
     var recipientC = recipient.toNativeUtf8();
     if (attachment == null)
@@ -648,7 +652,7 @@ bool networkParamsSet(String assetIdMainnet, String assetIdTestnet, String nodeU
     return spendTx;
   }
 
-  static Future<Tx> transactionBroadcast(SpendTx spendTx) {
+  static Future<Tx?> transactionBroadcast(SpendTx spendTx) {
     return compute(transactionBroadcastFromIsolate, spendTx);
   }
 

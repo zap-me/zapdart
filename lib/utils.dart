@@ -23,7 +23,7 @@ const INVALID_ASSET_ID = 2;
 const INVALID_CLAIMCODE_URI = 3;
 const INVALID_APIKEY_URI = 4;
 
-String formatAttachment(String deviceName, String msg, String category, {String currentAttachment}) {
+String formatAttachment(String? deviceName, String? msg, String? category, {String? currentAttachment}) {
   var map = Map<String, dynamic>();
   if (currentAttachment != null && currentAttachment.isNotEmpty)
     try {
@@ -44,7 +44,7 @@ String formatAttachment(String deviceName, String msg, String category, {String 
   return json.encode(map);
 }
 
-String parseUriParameter(String input, String token) {
+String? parseUriParameter(String input, String token) {
   token = token + '=';
   if (input.length > token.length && input.substring(0, token.length).toLowerCase() == token)
     return input.substring(token.length);
@@ -140,7 +140,7 @@ ApiKeyResult parseApiKeyUri(String uri) {
   return ApiKeyResult(deviceName, apikey, secret, server, address, admin, error);
 }
 
-String parseRecipientOrWavesUri(bool testnet, String data) {
+String? parseRecipientOrWavesUri(bool testnet, String data) {
   var libzap = LibZap();
   if (libzap.addressCheck(data))
     return data;                // return input, user can use this data as an address
@@ -174,7 +174,7 @@ Future<void> alert(BuildContext context, String title, dynamic content) {
         title: Text(title),
         content: content is Widget ? content : Text('$content'),
         actions: <Widget>[
-          TextButton(
+          FlatButton(
             child: Text("Ok"),
             onPressed: () {
               Navigator.of(context).pop();
@@ -186,13 +186,15 @@ Future<void> alert(BuildContext context, String title, dynamic content) {
   );
 }
 
-Future<String> askString(BuildContext context, String title, String value) {
+Future<String?> askString(BuildContext context, String title, String? value) {
   final formKey = GlobalKey<FormState>();
   final txtController = new TextEditingController();
-  txtController.text = value;
+  if (value != null)
+    txtController.text = value;
 
   void submit() {
-    if (formKey.currentState.validate()) {
+    var cs = formKey.currentState;
+    if (cs != null && cs.validate()) {
       Navigator.pop(context, txtController.text);
     }
   }
@@ -207,7 +209,7 @@ Future<String> askString(BuildContext context, String title, String value) {
             controller: txtController,
             keyboardType: TextInputType.text,
             validator: (value) {
-              if (value.isEmpty) {
+              if (value == null || value.isEmpty) {
                 return 'Please enter a value';
               }
               return null;
@@ -216,11 +218,11 @@ Future<String> askString(BuildContext context, String title, String value) {
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                ElevatedButton.icon(
+                RaisedButton.icon(
                     onPressed: () { Navigator.pop(context); },
                     icon: Icon(Icons.cancel),
                     label: Text('Cancel')),
-                ElevatedButton.icon(
+                RaisedButton.icon(
                     onPressed: submit,
                     icon: Icon(Icons.send),
                     label: Text('Submit')),
@@ -242,13 +244,14 @@ Future<String> askString(BuildContext context, String title, String value) {
   );
 }
 
-Future<String> askSetMnemonicPassword(BuildContext context) async {
+Future<String?> askSetMnemonicPassword(BuildContext context) async {
   final formKey = GlobalKey<FormState>();
   final pwController = new TextEditingController();
   final pw2Controller = new TextEditingController();
 
   void submit() {
-    if (formKey.currentState.validate()) {
+    var cs = formKey.currentState;
+    if (cs != null && cs.validate()) {
       Navigator.pop(context, pwController.text);
     }
   }
@@ -265,7 +268,7 @@ Future<String> askSetMnemonicPassword(BuildContext context) async {
             keyboardType: TextInputType.text,
             decoration: new InputDecoration(labelText: 'Password'),
             validator: (value) {
-              if (value.isEmpty) {
+              if (value == null || value.isEmpty) {
                 return 'Please enter a value';
               }
               return null;
@@ -277,7 +280,7 @@ Future<String> askSetMnemonicPassword(BuildContext context) async {
             keyboardType: TextInputType.text,
             decoration: new InputDecoration(labelText: 'Password Again'),
             validator: (value) {
-              if (value.isEmpty) {
+              if (value == null || value.isEmpty) {
                 return 'Please enter a value';
               }
               if (value != pwController.text) {
@@ -289,11 +292,11 @@ Future<String> askSetMnemonicPassword(BuildContext context) async {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              ElevatedButton.icon(
+              RaisedButton.icon(
                   onPressed: () { Navigator.pop(context); },
                   icon: Icon(Icons.cancel),
                   label: Text('Cancel')),
-              ElevatedButton.icon(
+              RaisedButton.icon(
                   onPressed: submit,
                   icon: Icon(Icons.lock),
                   label: Text('Submit')),
@@ -315,12 +318,13 @@ Future<String> askSetMnemonicPassword(BuildContext context) async {
   );
 }
 
-Future<String> askMnemonicPassword(BuildContext context) async {
+Future<String?> askMnemonicPassword(BuildContext context) async {
   final formKey = GlobalKey<FormState>();
   final pwController = new TextEditingController();
 
   void submit() {
-    if (formKey.currentState.validate()) {
+    var cs = formKey.currentState;
+    if (cs != null && cs.validate()) {
       Navigator.pop(context, pwController.text);
     }
   }
@@ -337,7 +341,7 @@ Future<String> askMnemonicPassword(BuildContext context) async {
             keyboardType: TextInputType.text,
             decoration: new InputDecoration(labelText: 'Password'),
             validator: (value) {
-              if (value.isEmpty) {
+              if (value == null || value.isEmpty) {
                 return 'Please enter a value';
               }
               return null;
@@ -346,11 +350,11 @@ Future<String> askMnemonicPassword(BuildContext context) async {
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                ElevatedButton.icon(
+                RaisedButton.icon(
                     onPressed: () { Navigator.pop(context); },
                     icon: Icon(Icons.cancel),
                     label: Text('Cancel')),
-                ElevatedButton.icon(
+                RaisedButton.icon(
                     onPressed: submit,
                     icon: Icon(Icons.lock),
                     label: Text('Submit')),
@@ -373,7 +377,7 @@ Future<String> askMnemonicPassword(BuildContext context) async {
 }
 
 Future<bool> askYesNo(BuildContext context, String question) async {
-  return showDialog<bool>(
+  var res = await showDialog<bool>(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
@@ -381,11 +385,11 @@ Future<bool> askYesNo(BuildContext context, String question) async {
         content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              ElevatedButton.icon(
+              RaisedButton.icon(
                   onPressed: () { Navigator.pop(context, false); },
                   icon: Icon(Icons.cancel),
                   label: Text('No')),
-              ElevatedButton.icon(
+              RaisedButton.icon(
                   onPressed: () { Navigator.pop(context, true); },
                   icon: Icon(Icons.check),
                   label: Text('Yes')),
@@ -394,6 +398,7 @@ Future<bool> askYesNo(BuildContext context, String question) async {
       );
     },
   );
+  return res == true;
 }
 
 class EncryptedMnemonic {
@@ -423,7 +428,7 @@ EncryptedMnemonic encryptMnemonic(String mnemonic, String password) {
   return EncryptedMnemonic(encrypted.base64, iv.base64);
 }
 
-String decryptMnemonic(String encryptedMnemonicBase64, String ivBase64, String password) {
+String? decryptMnemonic(String encryptedMnemonicBase64, String ivBase64, String password) {
   final key = padKey256(Key.fromUtf8(password));
   final iv = IV.fromBase64(ivBase64);
 
@@ -449,7 +454,7 @@ String base58encode(List<int> input) {
   return codec.encode(input);
 }
 
-Future<bool> pinCheck(BuildContext context, String pin) async {
+Future<bool> pinCheck(BuildContext context, String? pin) async {
   if (pin == null || pin == '')
     return true;
   var pin2 = await Navigator.push<String>(
@@ -460,13 +465,13 @@ Future<bool> pinCheck(BuildContext context, String pin) async {
   return pin == pin2;
 }
 
-Future<http.Response> httpPost(Uri uri, dynamic body, {String contentType = 'application/json', Map<String, String> extraHeaders}) async {
+Future<http.Response> httpPost(Uri uri, dynamic body, {String contentType = 'application/json', Map<String, String>? extraHeaders}) async {
   if (contentType != 'application/x-www-form-urlencoded' && contentType != 'application/json')
     throw FormatException('content type not supported');
   var headers = {'Content-Type': contentType};
   if (extraHeaders != null)
     for (var key in extraHeaders.keys) {
-      headers[key] = extraHeaders[key];
+      headers[key] = extraHeaders[key]!;
     }
   // http.post will url encode params automatically for application/x-www-form-urlencoded
   if (body is! String && contentType == 'application/json')
@@ -478,7 +483,7 @@ Future<http.Response> httpPost(Uri uri, dynamic body, {String contentType = 'app
   );
 }
 
-Future<http.Response> httpGet(Uri uri, {Map<String, String> extraHeaders}) async {
+Future<http.Response> httpGet(Uri uri, {Map<String, String>? extraHeaders}) async {
   var r = RetryOptions(maxAttempts: 4);
   return await r.retry(
     () => http.get(uri, headers: extraHeaders),

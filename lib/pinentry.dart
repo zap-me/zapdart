@@ -20,11 +20,9 @@ class _PinEntryState extends State<PinEntryScreen> {
   bool _done = false;
   bool _hasError = false;
   String _errorMessage = 'error';
-  FocusNode focusNode;
+  late FocusNode focusNode;
 
-  @override
-  void initState() {
-    super.initState();
+  _PinEntryState() {
     focusNode = FocusNode();
   }
 
@@ -42,7 +40,7 @@ class _PinEntryState extends State<PinEntryScreen> {
       ),
       body: Container(
         child: SingleChildScrollView(
-          child: Column(
+          child: Center(child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
@@ -72,7 +70,7 @@ class _PinEntryState extends State<PinEntryScreen> {
                     }
                   },
                   onDone: (text) {
-                    if (widget._pin != null) {
+                    if (widget._pin.isNotEmpty) {
                       if (text != widget._pin) {
                         _done = true;
                         setState(() {
@@ -117,7 +115,7 @@ class _PinEntryState extends State<PinEntryScreen> {
                 ),
               )
             ],
-          ),
+          ),),
         ),
       ),
     );

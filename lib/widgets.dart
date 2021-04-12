@@ -8,7 +8,7 @@ enum MessageCategory {
   Warning,
 }
 
-Widget backButton(BuildContext context, {Color color}) {
+Widget backButton(BuildContext context, {Color? color}) {
   if (color == null)
     color = ZapWhite;
   return IconButton(icon: Icon(Icons.arrow_back_ios, color: color), onPressed: () => Navigator.of(context).pop(false));
@@ -35,29 +35,29 @@ void flushbarMsg(BuildContext context, String msg, {int seconds = 3, MessageCate
 }
 
 class RoundedButton extends StatelessWidget {
-  RoundedButton(this.onPressed, this.textColor, this.fillColor, this.title, {this.icon, this.borderColor, this.minWidth, this.holePunch = false}) : super();
+  RoundedButton(this.onPressed, this.textColor, this.fillColor, this.title, {this.icon, this.borderColor, this.minWidth = 88, this.holePunch = false}) : super();
 
   final VoidCallback onPressed;
   final Color textColor;
   final Color fillColor;
   final String title;
-  final IconData icon;
-  final Color borderColor;
+  final IconData? icon;
+  final Color? borderColor;
   final double minWidth;
   final bool holePunch;
 
   @override
   Widget build(BuildContext context) {
     var _borderColor = borderColor != null ? borderColor : fillColor;
-    var shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: _borderColor));
+    var shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: _borderColor!));
     Widget text = Text(title, style: TextStyle(color: textColor, fontSize: 14));
-    ElevatedButton btn;
+    RaisedButton btn;
     if (icon != null && holePunch)
       throw ArgumentError('Can only use "icon" parameter OR "fwdArrowColor"');
     if (icon != null)
-      btn = ElevatedButton.icon(onPressed: onPressed,
+      btn = RaisedButton.icon(onPressed: onPressed,
         icon: Icon(icon, color: textColor, size: 14), label: text,
-        style: ElevatedButton.styleFrom(shape: shape, primary: fillColor));
+        shape: shape, color: fillColor);
     else {
       Widget child = text;
       if (holePunch) {
@@ -68,13 +68,11 @@ class RoundedButton extends StatelessWidget {
          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[SizedBox(width: 14), text, icon]));
       }
-      btn = ElevatedButton(onPressed: onPressed,
+      btn = RaisedButton(onPressed: onPressed,
         child: child,
-        style: ElevatedButton.styleFrom(shape: shape, primary: fillColor));
+        shape: shape, color: fillColor);
     }
-    if (minWidth != null)
-      return ButtonTheme(minWidth: minWidth, child: btn);
-    return btn;
+    return ButtonTheme(minWidth: minWidth, child: btn);
   }
 }
 

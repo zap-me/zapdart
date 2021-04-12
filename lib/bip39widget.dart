@@ -52,7 +52,7 @@ class Bip39Words extends StatelessWidget {
           return Container(
             width: 65, height: 30, padding: EdgeInsets.all(1),
             child: ButtonTheme(buttonColor: validBip39 ? ZapGreen.withAlpha(198) : ZapWhite, padding: EdgeInsets.all(2),
-              child: ElevatedButton(
+              child: RaisedButton(
                 child: Row(children: [
                   Text(' ${rowIndex * rowSize + index + 1}', style: TextStyle(color: ZapBlackLight, fontSize: 8)),
                   Expanded(
@@ -200,7 +200,7 @@ class _Bip39EntryState extends State<Bip39Entry> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List<Widget>.generate(_candidates.length, (index) {
             return ButtonTheme(minWidth: 40, height: 25, buttonColor: ZapYellow.withAlpha(198),
-              child: ElevatedButton(child: Text(_candidates[index]), onPressed: () => chooseWord(_candidates[index]))
+              child: RaisedButton(child: Text(_candidates[index]), onPressed: () => chooseWord(_candidates[index]))
             ); 
           })
         ),

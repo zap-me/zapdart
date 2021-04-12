@@ -5,7 +5,7 @@
 import 'dart:ffi' as ffi;
 import 'dart:io' show Platform;
 
-String _platformPath(String name, {String path}) {
+String _platformPath(String name, {String? path}) {
   if (path == null) path = "";
   if (Platform.isLinux || Platform.isAndroid)
     return path + "lib" + name + ".so";
@@ -18,7 +18,7 @@ String _platformPath(String name, {String path}) {
   throw Exception("Platform not implemented");
 }
 
-ffi.DynamicLibrary dlopenPlatformSpecific(String name, {String path}) {
+ffi.DynamicLibrary dlopenPlatformSpecific(String name, {String? path}) {
   // we open this process on iOS because we need to distribute as a framework (appstore does not allow dylibs)
   // and the framework is linked into the main image
   //if (Platform.isIOS)
