@@ -8,12 +8,53 @@ enum MessageCategory {
   Warning,
 }
 
-Widget backButton(BuildContext context, {Color? color}) {
+Widget backButton(BuildContext context, {Color? color, void Function()? onPressed}) {
   if (color == null)
     color = ZapWhite;
-  return IconButton(icon: Icon(Icons.arrow_back_ios, color: color), onPressed: () => Navigator.of(context).pop(false));
+  return IconButton(icon: Icon(Icons.arrow_back_ios, color: color), onPressed: onPressed != null ? onPressed : () => Navigator.of(context).pop(false));
 }
 
+ButtonStyle raisedButtonStyle({Color? primary, EdgeInsetsGeometry? padding, Size? minSize}) {
+  primary ??= Colors.grey[300];
+  padding ??= EdgeInsets.symmetric(horizontal: 16);
+  minSize ??= Size(88, 36);
+  return ElevatedButton.styleFrom(
+    onPrimary: Colors.black87,
+    primary: primary,
+    minimumSize: minSize,
+    padding: padding,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(2)),
+    ),
+  );
+}
+
+Widget raisedButton({required void Function()? onPressed, required Widget? child, Color? primary, EdgeInsetsGeometry? padding, Size? minSize}) {
+  return ElevatedButton(onPressed: onPressed, child: child, style: raisedButtonStyle(primary: primary, padding: padding, minSize: minSize));
+}
+
+Widget raisedButtonIcon({required void Function()? onPressed, required Widget icon, required Widget label, Color? primary, EdgeInsetsGeometry? padding, Size? minSize}) {
+  return ElevatedButton.icon(onPressed: onPressed, icon: icon, label: label, style: raisedButtonStyle(primary: primary, padding: padding, minSize: minSize));
+}
+
+ButtonStyle flatButtonStyle() {
+  return TextButton.styleFrom(
+    primary: Colors.black87,
+    minimumSize: Size(88, 36),
+    padding: EdgeInsets.symmetric(horizontal: 16.0),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(2.0)),
+    ),
+  );
+}
+
+Widget flatButton({required void Function()? onPressed, required Widget child}) {
+  return TextButton(onPressed: onPressed, child: child, style: flatButtonStyle());
+}
+
+Widget flatButtonIcon({required void Function()? onPressed, required Widget icon, required Widget label}) {
+  return TextButton.icon(onPressed: onPressed, icon: icon, label: label, style: flatButtonStyle());
+}
 
 void flushbarMsg(BuildContext context, String msg, {int seconds = 3, MessageCategory category = MessageCategory.Info}) {
   IconData icon;
@@ -51,7 +92,7 @@ class RoundedButton extends StatelessWidget {
     var _borderColor = borderColor != null ? borderColor : fillColor;
     var shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: _borderColor!));
     Widget text = Text(title, style: TextStyle(color: textColor, fontSize: 14));
-    RaisedButton btn;
+    Widget btn;
     if (icon != null && holePunch)
       throw ArgumentError('Can only use "icon" parameter OR "fwdArrowColor"');
     if (icon != null)

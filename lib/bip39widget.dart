@@ -3,6 +3,7 @@ import 'package:edit_distance/edit_distance.dart';
 
 import 'libzap.dart';
 import 'colors.dart';
+import 'widgets.dart';
 
 typedef WordIndexCallback = void Function(int); 
 typedef WordsCallback = void Function(List<String>); 
@@ -51,14 +52,15 @@ class Bip39Words extends StatelessWidget {
         return Row(mainAxisSize: MainAxisSize.min, children: item.mapIndex((item, index) {
           return Container(
             width: 65, height: 30, padding: EdgeInsets.all(1),
-            child: ButtonTheme(buttonColor: validBip39 ? ZapGreen.withAlpha(198) : ZapWhite, padding: EdgeInsets.all(2),
-              child: RaisedButton(
-                child: Row(children: [
-                  Text(' ${rowIndex * rowSize + index + 1}', style: TextStyle(color: ZapBlackLight, fontSize: 8)),
-                  Expanded(
-                    child: Center(child: Text(item, style: TextStyle(fontSize: 11)))
-                  )]),
-                onPressed: () => onWordPressed(rowIndex * rowSize + index))));
+            child: raisedButton(
+              child: Row(children: [
+                Text(' ${rowIndex * rowSize + index + 1}', style: TextStyle(color: ZapBlackLight, fontSize: 8)),
+                Expanded(
+                  child: Center(child: Text(item, style: TextStyle(fontSize: 10)))
+                )]),
+              onPressed: () => onWordPressed(rowIndex * rowSize + index),
+              primary: validBip39 ? ZapGreen.withAlpha(198) : ZapWhite,
+              padding: EdgeInsets.all(2)));
           }).toList()
         );
       }).toList()
@@ -199,8 +201,8 @@ class _Bip39EntryState extends State<Bip39Entry> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List<Widget>.generate(_candidates.length, (index) {
-            return ButtonTheme(minWidth: 40, height: 25, buttonColor: ZapYellow.withAlpha(198),
-              child: RaisedButton(child: Text(_candidates[index]), onPressed: () => chooseWord(_candidates[index]))
+            return raisedButton(child: Text(_candidates[index]), onPressed: () => chooseWord(_candidates[index]),
+              primary: ZapYellow.withAlpha(198), minSize: Size(40, 25)
             ); 
           })
         ),

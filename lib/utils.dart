@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 
 import 'libzap.dart';
 import 'pinentry.dart';
+import 'widgets.dart';
 
 //
 // We do our own uri parsing until dart has better struct/fixed-size-array support in ffi
@@ -174,11 +175,9 @@ Future<void> alert(BuildContext context, String title, dynamic content) {
         title: Text(title),
         content: content is Widget ? content : Text('$content'),
         actions: <Widget>[
-          FlatButton(
+          raisedButton(
             child: Text("Ok"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+            onPressed: () => Navigator.of(context).pop()
           ),
         ],
       );
@@ -218,11 +217,11 @@ Future<String?> askString(BuildContext context, String title, String? value) {
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                RaisedButton.icon(
+                raisedButtonIcon(
                     onPressed: () { Navigator.pop(context); },
                     icon: Icon(Icons.cancel),
                     label: Text('Cancel')),
-                RaisedButton.icon(
+                raisedButtonIcon(
                     onPressed: submit,
                     icon: Icon(Icons.send),
                     label: Text('Submit')),
@@ -292,11 +291,11 @@ Future<String?> askSetMnemonicPassword(BuildContext context) async {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              RaisedButton.icon(
+              raisedButtonIcon(
                   onPressed: () { Navigator.pop(context); },
                   icon: Icon(Icons.cancel),
                   label: Text('Cancel')),
-              RaisedButton.icon(
+              raisedButtonIcon(
                   onPressed: submit,
                   icon: Icon(Icons.lock),
                   label: Text('Submit')),
@@ -350,11 +349,11 @@ Future<String?> askMnemonicPassword(BuildContext context) async {
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                RaisedButton.icon(
+                raisedButtonIcon(
                     onPressed: () { Navigator.pop(context); },
                     icon: Icon(Icons.cancel),
                     label: Text('Cancel')),
-                RaisedButton.icon(
+                raisedButtonIcon(
                     onPressed: submit,
                     icon: Icon(Icons.lock),
                     label: Text('Submit')),
@@ -385,11 +384,11 @@ Future<bool> askYesNo(BuildContext context, String question) async {
         content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              RaisedButton.icon(
+              raisedButtonIcon(
                   onPressed: () { Navigator.pop(context, false); },
                   icon: Icon(Icons.cancel),
                   label: Text('No')),
-              RaisedButton.icon(
+              raisedButtonIcon(
                   onPressed: () { Navigator.pop(context, true); },
                   icon: Icon(Icons.check),
                   label: Text('Yes')),
