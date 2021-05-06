@@ -536,11 +536,10 @@ class LibZap {
     return lzapAssetIdGet().toDartString();
   }
 
-  bool assetIdSet(String value) {
+  void assetIdSet(String value) {
     var valueC = value.toNativeUtf8();
-    var res = lzapAssetIdSet(valueC) != 0;
+    lzapAssetIdSet(valueC) != 0;
     calloc.free(valueC);
-    return res;
   }
 
 bool networkParamsSet(String? assetIdMainnet, String? assetIdTestnet, String? nodeUrlMainnet, String? nodeUrlTestnet, bool testnet) {
@@ -550,16 +549,13 @@ bool networkParamsSet(String? assetIdMainnet, String? assetIdTestnet, String? no
       result =  false;
     if (testnet && assetIdTestnet != null) {
       print('assetIdSet("$assetIdTestnet")..');
-      if (!assetIdSet(assetIdTestnet))
-        result =  false;
+      assetIdSet(assetIdTestnet);
     } else if (!testnet && assetIdMainnet != null) {
       print('assetIdSet("$assetIdMainnet")..');
-      if (!assetIdSet(assetIdMainnet))
-        result =  false;
+      assetIdSet(assetIdMainnet);
     } else {
       print('assetIdSet("")..');
-      if (!assetIdSet(''))
-        result =  false;
+      assetIdSet('');
     }
     if (testnet && nodeUrlTestnet != null) {
       print('nodeSet("$nodeUrlTestnet")..');
