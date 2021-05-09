@@ -334,7 +334,12 @@ class AddrTxsRequest {
   String? after;
   AddrTxsRequest(this.address, this.count, this.after);
 }
-Iterable<Tx> addressTransactionsFromIsolate(AddrTxsRequest req) {
+class AddrTxsResult {
+  bool success;
+  Iterable<Tx> txs;
+  AddrTxsResult(this.success, this.txs);
+}
+AddrTxsResult addressTransactionsFromIsolate(AddrTxsRequest req) {
   // as we are running this in an isolate we need to reinit a LibZap instance
   // to get the function pointer as closures can not be passed to isolates
   var libzap = LibZap();
@@ -356,7 +361,7 @@ Iterable<Tx> addressTransactionsFromIsolate(AddrTxsRequest req) {
     calloc.free(afterC);
   calloc.free(txsC);
   calloc.free(addrC);
-  return txs;
+  return AddrTxsResult(res, txs);
 }
 
 IntResult transactionFeeFromIsolate(int dummy) {
@@ -624,7 +629,7 @@ bool networkParamsSet(String? assetIdMainnet, String? assetIdTestnet, String? no
     return compute(addressBalanceFromIsolate, address);
   }
 
-  static Future<Iterable<Tx>> addressTransactions(String address, int count, String? after) async {
+  static Future<AddrTxsResult> addressTransactions(String address, int count, String? after) async {
     return compute(addressTransactionsFromIsolate, AddrTxsRequest(address, count, after));
   }
 
