@@ -15,20 +15,17 @@ class PinEntryScreen extends StatefulWidget {
 }
 
 class _PinEntryState extends State<PinEntryScreen> {
-  TextEditingController controller = TextEditingController(text: "");
-  int _pinLength = 4;
+  final TextEditingController _controller = TextEditingController(text: "");
+  final int _pinLength = 5;
   bool _done = false;
   bool _hasError = false;
   String _errorMessage = 'error';
-  late FocusNode focusNode;
-
-  _PinEntryState() {
-    focusNode = FocusNode();
-  }
+  final _animDelay = 300;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void dispose() {
-    focusNode.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -47,11 +44,11 @@ class _PinEntryState extends State<PinEntryScreen> {
                 padding: const EdgeInsets.only(bottom: 60.0),
               ),
               Container(
-                height: 100.0,
+                height: 100,
                 child: PinCodeTextField(
                   autofocus: true,
-                  controller: controller,
-                  focusNode: focusNode,
+                  controller: _controller,
+                  focusNode: _focusNode,
                   hideCharacter: true,
                   highlight: true,
                   highlightColor: ZapBlue,
@@ -59,7 +56,7 @@ class _PinEntryState extends State<PinEntryScreen> {
                   hasTextBorderColor: ZapGreen,
                   maxLength: _pinLength,
                   hasError: _hasError,
-                  maskCharacter: "😎",
+                  maskCharacter: "*",
                   onTextChanged: (text) {
                     if (_done) {
                       _done = false;
@@ -80,16 +77,20 @@ class _PinEntryState extends State<PinEntryScreen> {
                         return;
                       }
                     }
-                    Navigator.pop(context, text);
+                    Future.delayed(Duration(milliseconds: _animDelay), () {
+                      Navigator.pop(context, text);
+                    });
                   },
                   wrapAlignment: WrapAlignment.spaceAround,
                   pinBoxDecoration: ProvidedPinBoxDecoration.defaultPinBoxDecoration,
                   pinTextStyle: TextStyle(fontSize: 30.0),
                   pinTextAnimatedSwitcherTransition: ProvidedPinBoxTextAnimation.scalingTransition,
-                  pinTextAnimatedSwitcherDuration: Duration(milliseconds: 300),
+                  pinTextAnimatedSwitcherDuration: Duration(milliseconds: _animDelay),
                   highlightAnimationBeginColor: ZapBlack,
                   highlightAnimationEndColor: ZapWhite,
                   keyboardType: TextInputType.number,
+                  pinBoxWidth: 50,
+                  pinBoxHeight: 50,
                 ),
 
               ),
@@ -107,8 +108,8 @@ class _PinEntryState extends State<PinEntryScreen> {
                       textColor: ZapWhite,
                       child: Text("Clear"),
                       onPressed: () {
-                        controller.clear();
-                        focusNode.requestFocus();
+                        _controller.clear();
+                        _focusNode.requestFocus();
                       },
                     ),
                   ],
