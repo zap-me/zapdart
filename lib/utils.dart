@@ -152,16 +152,17 @@ String? parseRecipientOrWavesUri(bool testnet, String data) {
 }
 
 void showAlertDialog(BuildContext context, String msg) {
-  var alert= AlertDialog(
-    content: new Row(
+  var alert = AlertDialog(
+    content: Row(
         children: [
             CircularProgressIndicator(),
-            Container(margin: EdgeInsets.only(left: 10), child: Text(msg)),
+            SizedBox(width: 10),
+            Flexible(child: Text(msg, maxLines: 3))
         ],),
   );
   showDialog(barrierDismissible: false,
-    context:context,
-    builder:(BuildContext context){
+    context: context,
+    builder: (BuildContext context) {
       return alert;
     },
   );
