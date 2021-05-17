@@ -490,3 +490,13 @@ Future<http.Response> httpGet(Uri uri, {Map<String, String>? extraHeaders}) asyn
     retryIf: (e) => e is SocketException || e is TimeoutException,
   );
 }
+
+void dismissKeyboard(BuildContext context) {
+  // unfocus any text fields when touching non interactive part of app
+  // this should hide any keyboards
+  var currentFocus = FocusScope.of(context);
+  if (!currentFocus.hasPrimaryFocus &&
+      currentFocus.focusedChild != null) {
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+}
