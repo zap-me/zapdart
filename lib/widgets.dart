@@ -90,30 +90,42 @@ class RoundedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _borderColor = borderColor != null ? borderColor : fillColor;
-    var shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: _borderColor!));
+    var shape = MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: _borderColor!)));
+    var minSize = MaterialStateProperty.all<Size>(Size(minWidth, 35));
     Widget text = Text(title, style: TextStyle(color: textColor, fontSize: 14));
     Widget btn;
     if (icon != null && holePunch)
-      throw ArgumentError('Can only use "icon" parameter OR "fwdArrowColor"');
+      throw ArgumentError('Can only use "icon" parameter OR "holePunch"');
     if (icon != null)
-      btn = RaisedButton.icon(onPressed: onPressed,
+      btn = ElevatedButton.icon(onPressed: onPressed,
         icon: Icon(icon, color: textColor, size: 14), label: text,
-        shape: shape, color: fillColor);
+        style: ButtonStyle(
+          shape: shape,
+          backgroundColor: MaterialStateProperty.all<Color>(fillColor),
+          minimumSize: minSize,
+        ));
     else {
-      Widget child = text;
+      btn = ElevatedButton(onPressed: onPressed,
+        child: text,
+        style: ButtonStyle(
+          shape: shape,
+          backgroundColor: MaterialStateProperty.all<Color>(fillColor),
+          minimumSize: minSize,
+        ));
       if (holePunch) {
-        // this is a hack, there is no drop shadow in the hole punch, and it is not aligned with the border
-        var icon = Container(width: 20, height: 20, decoration: BoxDecoration(color: textColor, shape: BoxShape.circle),
-          child: Icon(Icons.arrow_forward_ios, size: 14, color: fillColor));
-        child = Container(width: minWidth - 16 - 16,
-         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[SizedBox(width: 14), text, icon]));
+        // this is a hack, havent figured out how to do the inner drop shadow
+        var circle = Container(width: 20, height: 20,
+          decoration: BoxDecoration(shape: BoxShape.circle, color: textColor));
+        var stack = Stack(alignment: AlignmentDirectional.center,
+          children: [
+            btn,
+            Positioned(child: circle, right: 8),
+            Positioned(child: Icon(Icons.arrow_forward_ios, size: 14, color: fillColor), right: 10)]
+        );
+        btn = stack;
       }
-      btn = RaisedButton(onPressed: onPressed,
-        child: child,
-        shape: shape, color: fillColor);
     }
-    return ButtonTheme(minWidth: minWidth, child: btn);
+    return btn;
   }
 }
 
