@@ -6,23 +6,26 @@ typedef TextTheme TextThemer([TextTheme textTheme]);
 
 Brightness ZapBrightness = Brightness.light;
 
-Color ZapWhite =        Colors.white;
-Color ZapGrey =         Color(0xFFF8F6F1);
-Color ZapBlue =         Color(0xFF3765CB);
-Color ZapYellow =       Color(0xFFFFBB00);
-Color ZapGreen =        Color(0xFF009075);
-Color ZapRed =          Colors.red;
-Color ZapWarning =      ZapYellow;
-Color ZapWarningLight = Color(0x80FFBB00);
-Color ZapBlack =        Colors.black;
-Color ZapBlackMed =     Colors.black54;
-Color ZapBlackLight =   Colors.black38;
+Color ZapWhite =         Colors.white;
+Color ZapGrey =          Color(0xFFF8F6F1);
+Color ZapBlue =          Color(0xFF3765CB);
+Color ZapYellow =        Color(0xFFFFBB00);
+Color ZapGreen =         Color(0xFF009075);
+Color ZapRed =           Colors.red;
+Color ZapWarning =       ZapYellow;
+Color ZapWarningLight =  Color(0x80FFBB00);
+Color ZapBlack =         Colors.black;
+Color ZapBlackMed =      Colors.black54;
+Color ZapBlackLight =    Colors.black38;
+Color ZapOutgoingFunds = ZapYellow;
+Color ZapIncomingFunds = ZapGreen;
 
 TextThemer ZapTextThemer = GoogleFonts.oxygenTextTheme;
 
 void overrideTheme({Brightness? zapBrightness,
   Color? zapWhite, Color? zapGrey, Color? zapBlue, Color? zapYellow, Color? zapGreen, Color? zapRed,
   Color? zapWarning, Color? zapWarningLight, Color? zapBlack, Color? zapBlackMed, Color? zapBlackLight,
+  Color? zapOutgoingFunds, Color? zapIncomingFunds,
   TextThemer? zapTextThemer}) {
   // brightness
   if (zapBrightness != null)
@@ -50,6 +53,10 @@ void overrideTheme({Brightness? zapBrightness,
     ZapBlackMed = zapBlackMed;
   if (zapBlackLight != null)
     ZapBlackLight = zapBlackLight;
+  if (zapOutgoingFunds != null)
+    ZapOutgoingFunds = zapOutgoingFunds;
+  if (zapIncomingFunds!= null)
+    ZapIncomingFunds = zapIncomingFunds;
   // text theme
   if (zapTextThemer != null)
     ZapTextThemer = zapTextThemer;
