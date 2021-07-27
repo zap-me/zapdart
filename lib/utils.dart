@@ -151,14 +151,18 @@ String? parseRecipientOrWavesUri(bool testnet, String data) {
   return null;                  // return null, data is not usable/valid
 }
 
-void showAlertDialog(BuildContext context, String msg) {
+void showAlertDialog(BuildContext context, String msg, {bool showCancel: false, Function()? onCancel: null}) {
   var alert = AlertDialog(
-    content: Row(
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [Row(
         children: [
             CircularProgressIndicator(),
             SizedBox(width: 10),
             Flexible(child: Text(msg, maxLines: 3))
-        ],),
+        ]),
+        showCancel ? raisedButton(onPressed: onCancel, child: Text('Cancel')) : SizedBox()
+      ])
   );
   showDialog(barrierDismissible: false,
     context: context,
