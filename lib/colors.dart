@@ -14,7 +14,7 @@ Gradient? ZapBlueGradient = LinearGradient(
           end: Alignment.bottomRight,
           colors: [
             ZapBlue,
-            Color(0xFF5080CB)
+            Color(0xFF6090E0)
           ]);
 Color ZapYellow =        Color(0xFFFFBB00);
 Gradient? ZapYellowGradient = LinearGradient(
@@ -22,7 +22,7 @@ Gradient? ZapYellowGradient = LinearGradient(
           end: Alignment.bottomRight,
           colors: [
             ZapYellow,
-            Color(0xFFFFD020)
+            Color(0xFFFFD030)
           ]);
 Color ZapGreen =         Color(0xFF009075);
 Gradient? ZapGreenGradient = LinearGradient(

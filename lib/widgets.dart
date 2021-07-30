@@ -76,42 +76,57 @@ void flushbarMsg(BuildContext context, String msg, {int seconds = 3, MessageCate
 }
 
 class RoundedButton extends StatelessWidget {
-  RoundedButton(this.onPressed, this.textColor, this.fillColor, this.title, {this.icon, this.borderColor, this.minWidth = 88, this.holePunch = false}) : super();
+  RoundedButton(this.onPressed, this.textColor, this.fillColor, this.fillGradient, this.title, {this.icon, this.borderColor, this.width = 190, this.height = 35, this.holePunch = false}) : super();
 
   final VoidCallback onPressed;
   final Color textColor;
   final Color fillColor;
+  final Gradient? fillGradient;
   final String title;
   final IconData? icon;
   final Color? borderColor;
-  final double minWidth;
+  final double width;
+  final double height;
   final bool holePunch;
 
   @override
   Widget build(BuildContext context) {
-    var _borderColor = borderColor != null ? borderColor : fillColor;
-    var shape = MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: _borderColor!)));
-    var minSize = MaterialStateProperty.all<Size>(Size(minWidth, 35));
-    Widget text = Text(title, style: TextStyle(color: textColor, fontSize: 14));
+    var radius = BorderRadius.circular(18.0);
+    var buttonStyle = ElevatedButton.styleFrom(
+            primary: fillGradient == null ? fillColor : Colors.transparent,
+            side: fillGradient == null ? BorderSide(color: borderColor != null ? borderColor! : fillColor) : null,
+            shape: RoundedRectangleBorder(borderRadius: radius),
+            shadowColor: Colors.transparent
+          );
+    var decoration = BoxDecoration(
+      color: fillColor,
+      border: borderColor != null ? Border.all(color: borderColor!) : null,
+      gradient: fillGradient,
+      borderRadius: radius,
+      boxShadow: kElevationToShadow[3],
+    );
+    var text = Text(title, style: TextStyle(color: textColor, fontSize: 14));
     Widget btn;
     if (icon != null && holePunch)
       throw ArgumentError('Can only use "icon" parameter OR "holePunch"');
-    if (icon != null)
-      btn = ElevatedButton.icon(onPressed: onPressed,
-        icon: Icon(icon, color: textColor, size: 14), label: text,
-        style: ButtonStyle(
-          shape: shape,
-          backgroundColor: MaterialStateProperty.all<Color>(fillColor),
-          minimumSize: minSize,
-        ));
+    if (icon != null) {
+      var row = Row(children: [Icon(icon, color: textColor, size: 14), text], mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.spaceAround);
+      btn = Container(width: width, height: height, margin: EdgeInsets.all(5), child:
+        DecoratedBox(
+          decoration: decoration,
+          child: ElevatedButton(onPressed: onPressed,
+            child: row,
+            style: buttonStyle
+          )));
+    }
     else {
-      btn = ElevatedButton(onPressed: onPressed,
-        child: text,
-        style: ButtonStyle(
-          shape: shape,
-          backgroundColor: MaterialStateProperty.all<Color>(fillColor),
-          minimumSize: minSize,
-        ));
+      btn = Container(width: width, height: height, margin: EdgeInsets.all(5), child:
+        DecoratedBox(
+          decoration: decoration,
+          child: ElevatedButton(onPressed: onPressed,
+            child: text,
+            style: buttonStyle
+          )));
       if (holePunch) {
         // this is a hack, havent figured out how to do the inner drop shadow
         var circle = Container(width: 20, height: 20,
