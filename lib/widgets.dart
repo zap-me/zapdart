@@ -76,7 +76,7 @@ void flushbarMsg(BuildContext context, String msg, {int seconds = 3, MessageCate
 }
 
 class RoundedButton extends StatelessWidget {
-  RoundedButton(this.onPressed, this.textColor, this.fillColor, this.fillGradient, this.title, {this.icon, this.borderColor, this.width = 190, this.height = 35, this.holePunch = false}) : super();
+  RoundedButton(this.onPressed, this.textColor, this.fillColor, this.fillGradient, this.title, {this.icon, this.borderColor, this.width = 88, this.height = 35, this.holePunch = false}) : super();
 
   final VoidCallback onPressed;
   final Color textColor;
@@ -134,8 +134,8 @@ class RoundedButton extends StatelessWidget {
         var stack = Stack(alignment: AlignmentDirectional.center,
           children: [
             btn,
-            Positioned(child: circle, right: 8),
-            Positioned(child: Icon(Icons.arrow_forward_ios, size: 14, color: fillColor), right: 10)]
+            Positioned(child: circle, right: 12),
+            Positioned(child: Icon(Icons.arrow_forward_ios, size: 14, color: fillColor), right: 14)]
         );
         btn = stack;
       }
