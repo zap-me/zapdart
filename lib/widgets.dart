@@ -229,22 +229,26 @@ class AlertDrawer extends StatelessWidget {
 }
 
 class CustomCurve extends CustomPainter{
-  CustomCurve(this.color, this.curveStart, this.curveBottom) : super();
+  CustomCurve(this.color, this.gradient, this.curveStart, this.curveBottom) : super();
 
   final Color color;
+  final Gradient? gradient;
   final double curveStart;
   final double curveBottom;
 
   @override
   void paint(Canvas canvas, Size size) {
     var path = Path();
-    var paint = Paint();
     path.moveTo(0, 0);
     path.lineTo(0, curveStart);
     path.quadraticBezierTo(size.width / 2, curveBottom, size.width, curveStart);
     path.lineTo(size.width, 0);
     path.close();
-    paint.color = color;
+    var paint = Paint();
+    if (gradient != null)
+      paint.shader = paint.shader = gradient!.createShader(Rect.fromLTWH(0, 0, size.width, curveBottom));
+    else
+      paint.color = color;
     canvas.drawPath(path, paint);
   }
 

@@ -9,8 +9,29 @@ Brightness ZapBrightness = Brightness.light;
 Color ZapWhite =         Colors.white;
 Color ZapGrey =          Color(0xFFF8F6F1);
 Color ZapBlue =          Color(0xFF3765CB);
+Gradient? ZapBlueGradient = LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            ZapBlue,
+            Color(0xFF5080CB)
+          ]);
 Color ZapYellow =        Color(0xFFFFBB00);
+Gradient? ZapYellowGradient = LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            ZapYellow,
+            Color(0xFFFFD020)
+          ]);
 Color ZapGreen =         Color(0xFF009075);
+Gradient? ZapGreenGradient = LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            ZapGreen,
+            Color(0xFF109090)
+          ]);
 Color ZapRed =           Colors.red;
 Color ZapWarning =       ZapYellow;
 Color ZapWarningLight =  Color(0x80FFBB00);
@@ -23,7 +44,7 @@ Color ZapIncomingFunds = ZapGreen;
 TextThemer ZapTextThemer = GoogleFonts.oxygenTextTheme;
 
 void overrideTheme({Brightness? zapBrightness,
-  Color? zapWhite, Color? zapGrey, Color? zapBlue, Color? zapYellow, Color? zapGreen, Color? zapRed,
+  Color? zapWhite, Color? zapGrey, Color? zapBlue, Gradient? zapBlueGradient, Color? zapYellow, Gradient? zapYellowGradient, Color? zapGreen, Gradient? zapGreenGradient, Color? zapRed,
   Color? zapWarning, Color? zapWarningLight, Color? zapBlack, Color? zapBlackMed, Color? zapBlackLight,
   Color? zapOutgoingFunds, Color? zapIncomingFunds,
   TextThemer? zapTextThemer}) {
@@ -37,10 +58,16 @@ void overrideTheme({Brightness? zapBrightness,
     ZapGrey = zapGrey;
   if (zapBlue != null)
     ZapBlue = zapBlue;
+  if (zapBlueGradient != null)
+    ZapBlueGradient = zapBlueGradient;
   if (zapYellow != null)
     ZapYellow = zapYellow;
+  if (zapYellowGradient != null)
+    ZapYellowGradient = zapYellowGradient;
   if (zapGreen != null)
     ZapGreen = zapGreen;
+  if (zapGreenGradient != null)
+    ZapGreenGradient = zapGreenGradient;
   if (zapRed != null)
     ZapRed = zapRed;
   if (zapWarning != null)
