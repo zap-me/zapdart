@@ -38,15 +38,16 @@ Color ZapWarningLight =  Color(0x80FFBB00);
 Color ZapBlack =         Colors.black;
 Color ZapBlackMed =      Colors.black54;
 Color ZapBlackLight =    Colors.black38;
-Color ZapOutgoingFunds = ZapYellow;
-Color ZapIncomingFunds = ZapGreen;
+Color ZapOutgoingFunds = Colors.red;
+Color ZapIncomingFunds = Colors.green;
+Color ZapSelfFunds =     Colors.black;
 
 TextThemer ZapTextThemer = GoogleFonts.oxygenTextTheme;
 
 void overrideTheme({Brightness? zapBrightness,
   Color? zapWhite, Color? zapGrey, Color? zapBlue, Gradient? zapBlueGradient, Color? zapYellow, Gradient? zapYellowGradient, Color? zapGreen, Gradient? zapGreenGradient, Color? zapRed,
   Color? zapWarning, Color? zapWarningLight, Color? zapBlack, Color? zapBlackMed, Color? zapBlackLight,
-  Color? zapOutgoingFunds, Color? zapIncomingFunds,
+  Color? zapOutgoingFunds, Color? zapIncomingFunds, Color? zapSelfFunds,
   TextThemer? zapTextThemer}) {
   // brightness
   if (zapBrightness != null)
@@ -82,8 +83,10 @@ void overrideTheme({Brightness? zapBrightness,
     ZapBlackLight = zapBlackLight;
   if (zapOutgoingFunds != null)
     ZapOutgoingFunds = zapOutgoingFunds;
-  if (zapIncomingFunds!= null)
+  if (zapIncomingFunds != null)
     ZapIncomingFunds = zapIncomingFunds;
+  if (zapSelfFunds != null)
+    ZapSelfFunds = zapSelfFunds;
   // text theme
   if (zapTextThemer != null)
     ZapTextThemer = zapTextThemer;
