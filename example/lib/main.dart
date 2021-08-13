@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:zapdart/bip39widget.dart';
 import 'package:zapdart/colors.dart';
 
 import 'package:zapdart/utils.dart';

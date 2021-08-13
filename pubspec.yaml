@@ -26,3 +26,11 @@ dependencies:
   decimal: ^1.0.0+1
   google_fonts: ^2.0.0
   universal_platform: ^1.0.0+1
+  image_picker: ^0.8.3+2
+  extended_image: ^4.1.0
+  image: ^3.0.2
+  intl_phone_number_input: ^0.7.0+2
+  debounce_throttle: ^2.0.0
+  email_validator: ^2.0.1
+  uuid: ^3.0.4
+  flutter_svg: ^0.22.0
