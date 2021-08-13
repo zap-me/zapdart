@@ -85,7 +85,7 @@ Widget accountImage(String? imgString, String? imgType,
     if (imgType == 'svg')
       return SvgPicture.string(imgString, width: size, height: size);
   }
-  return SvgPicture.asset('assets/user.svg', width: size, height: size);
+  return SvgPicture.asset('assets/user.svg', package: 'zapdart', width: size, height: size);
 }
 
 class AccountImageUpdate extends StatelessWidget {
