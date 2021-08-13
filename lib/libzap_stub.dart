@@ -7,12 +7,11 @@ LibZap getLibZap() => LibZapStub();
 //
 
 class LibZapStub implements LibZap {
-
   //
   // stubbed libzap wrapper functions
   //
 
-  int version() { 
+  int version() {
     return -1;
   }
 
@@ -40,7 +39,8 @@ class LibZapStub implements LibZap {
     throw UnsupportedError('Cannot use LibZap on this platform!');
   }
 
-  bool networkParamsSet(String? assetIdMainnet, String? assetIdTestnet, String? nodeUrlMainnet, String? nodeUrlTestnet, bool testnet) {
+  bool networkParamsSet(String? assetIdMainnet, String? assetIdTestnet,
+      String? nodeUrlMainnet, String? nodeUrlTestnet, bool testnet) {
     throw UnsupportedError('Cannot use LibZap on this platform!');
   }
 
@@ -68,7 +68,8 @@ class LibZapStub implements LibZap {
     throw UnsupportedError('Cannot use LibZap on this platform!');
   }
 
-  Future<AddrTxsResult> addressTransactions(String address, int count, String? after) async {
+  Future<AddrTxsResult> addressTransactions(
+      String address, int count, String? after) async {
     throw UnsupportedError('Cannot use LibZap on this platform!');
   }
 
@@ -76,7 +77,8 @@ class LibZapStub implements LibZap {
     throw UnsupportedError('Cannot use LibZap on this platform!');
   }
 
-  SpendTx transactionCreate(String seed, String recipient, int amount, int fee, String? attachment) {
+  SpendTx transactionCreate(
+      String seed, String recipient, int amount, int fee, String? attachment) {
     throw UnsupportedError('Cannot use LibZap on this platform!');
   }
 

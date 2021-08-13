@@ -20,10 +20,10 @@ class Tx {
   int fee;
   int timestamp;
 
-  Tx(this.type, this.id, this.sender, this.recipient, this.assetId, this.feeAsset, this.attachment, this.amount, this.fee, this.timestamp);
+  Tx(this.type, this.id, this.sender, this.recipient, this.assetId,
+      this.feeAsset, this.attachment, this.amount, this.fee, this.timestamp);
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'type': type,
         'id': id,
         'sender': sender,
@@ -70,19 +70,23 @@ class AddrTxsResult {
 //
 
 abstract class LibZap {
-  static const String TESTNET_ASSET_ID = "CgUrFtinLXEbJwJVjwwcppk4Vpz1nMmR3H5cQaDcUcfe";
-  static const String MAINNET_ASSET_ID = "9R3iLi4qGLVWKc16Tg98gmRvgg1usGEYd7SgC1W5D6HB";
+  static const String TESTNET_ASSET_ID =
+      "CgUrFtinLXEbJwJVjwwcppk4Vpz1nMmR3H5cQaDcUcfe";
+  static const String MAINNET_ASSET_ID =
+      "9R3iLi4qGLVWKc16Tg98gmRvgg1usGEYd7SgC1W5D6HB";
 
-  static String paymentUri(bool testnet, String address, int? amount, String? deviceName) {
-    var uri = "waves://$address?asset=${testnet ? TESTNET_ASSET_ID : MAINNET_ASSET_ID}";
-    if (amount != null)
-      uri += "&amount=$amount";
+  static String paymentUri(
+      bool testnet, String address, int? amount, String? deviceName) {
+    var uri =
+        "waves://$address?asset=${testnet ? TESTNET_ASSET_ID : MAINNET_ASSET_ID}";
+    if (amount != null) uri += "&amount=$amount";
     if (deviceName != null && deviceName.isNotEmpty)
       uri += '&attachment={"device_name":"$deviceName"}';
     return uri;
   }
 
-  static String paymentUriDec(bool testnet, String address, Decimal? amount, String? deviceName) {
+  static String paymentUriDec(
+      bool testnet, String address, Decimal? amount, String? deviceName) {
     if (amount != null && amount > Decimal.fromInt(0)) {
       amount = amount * Decimal.fromInt(100);
       var amountInt = amount.toInt();
@@ -107,7 +111,8 @@ abstract class LibZap {
 
   void assetIdSet(String value);
 
-  bool networkParamsSet(String? assetIdMainnet, String? assetIdTestnet, String? nodeUrlMainnet, String? nodeUrlTestnet, bool testnet);
+  bool networkParamsSet(String? assetIdMainnet, String? assetIdTestnet,
+      String? nodeUrlMainnet, String? nodeUrlTestnet, bool testnet);
 
   String? mnemonicCreate();
 
@@ -121,11 +126,13 @@ abstract class LibZap {
 
   Future<IntResult> addressBalance(String address);
 
-  Future<AddrTxsResult> addressTransactions(String address, int count, String? after);
+  Future<AddrTxsResult> addressTransactions(
+      String address, int count, String? after);
 
   Future<IntResult> transactionFee();
 
-  SpendTx transactionCreate(String seed, String recipient, int amount, int fee, String? attachment);
+  SpendTx transactionCreate(
+      String seed, String recipient, int amount, int fee, String? attachment);
 
   Future<Tx?> transactionBroadcast(SpendTx spendTx);
 

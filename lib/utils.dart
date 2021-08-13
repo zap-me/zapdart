@@ -24,12 +24,13 @@ const INVALID_ASSET_ID = 2;
 const INVALID_CLAIMCODE_URI = 3;
 const INVALID_APIKEY_URI = 4;
 
-String formatAttachment(String? deviceName, String? msg, String? category, {String? currentAttachment}) {
+String formatAttachment(String? deviceName, String? msg, String? category,
+    {String? currentAttachment}) {
   var map = Map<String, dynamic>();
   if (currentAttachment != null && currentAttachment.isNotEmpty)
     try {
       map = json.decode(currentAttachment);
-    } catch(_) {}
+    } catch (_) {}
   if (msg != null && msg.isNotEmpty)
     map['msg'] = msg;
   else
@@ -47,7 +48,8 @@ String formatAttachment(String? deviceName, String? msg, String? category, {Stri
 
 String? parseUriParameter(String input, String token) {
   token = token + '=';
-  if (input.length > token.length && input.substring(0, token.length).toLowerCase() == token)
+  if (input.length > token.length &&
+      input.substring(0, token.length).toLowerCase() == token)
     return input.substring(token.length);
   return null;
 }
@@ -59,7 +61,8 @@ class WavesRequest {
   final String attachment;
   final int error;
 
-  WavesRequest(this.address, this.assetId, this.amount, this.attachment, this.error);
+  WavesRequest(
+      this.address, this.assetId, this.amount, this.attachment, this.error);
 
   String toUri() {
     return 'waves://$address?asset=$assetId&amount=$amount&attachment=$attachment';
@@ -86,13 +89,13 @@ WavesRequest parseWavesUri(bool testnet, String uri) {
         if (res != null) attachment = res;
       }
     }
-    var zapAssetId = testnet ? LibZap.TESTNET_ASSET_ID : LibZap.MAINNET_ASSET_ID;
+    var zapAssetId =
+        testnet ? LibZap.TESTNET_ASSET_ID : LibZap.MAINNET_ASSET_ID;
     if (assetId != zapAssetId) {
       address = '';
       error = INVALID_ASSET_ID;
     }
-  }
-  else
+  } else
     error = INVALID_WAVES_URI;
   return WavesRequest(address, assetId, amount, attachment, error);
 }
@@ -106,7 +109,8 @@ class ApiKeyResult {
   final bool accountAdmin;
   final int error;
 
-  ApiKeyResult(this.deviceName, this.apikey, this.apisecret, this.apiserver, this.walletAddress, this.accountAdmin, this.error);
+  ApiKeyResult(this.deviceName, this.apikey, this.apisecret, this.apiserver,
+      this.walletAddress, this.accountAdmin, this.error);
 }
 
 ApiKeyResult parseApiKeyUri(String uri) {
@@ -135,36 +139,38 @@ ApiKeyResult parseApiKeyUri(String uri) {
         if (res != null) admin = res.toLowerCase() == 'true';
       }
     }
-  }
-  else
+  } else
     error = INVALID_APIKEY_URI;
-  return ApiKeyResult(deviceName, apikey, secret, server, address, admin, error);
+  return ApiKeyResult(
+      deviceName, apikey, secret, server, address, admin, error);
 }
 
 String? parseRecipientOrWavesUri(bool testnet, String data) {
   var libzap = LibZap();
   if (libzap.addressCheck(data))
-    return data;                // return input, user can use this data as an address
+    return data; // return input, user can use this data as an address
   var result = parseWavesUri(testnet, data);
   if (result.error == NO_ERROR)
-    return result.address;      // return address part of waves uri, user should call parseWavesUri directly for extra details
-  return null;                  // return null, data is not usable/valid
+    return result
+        .address; // return address part of waves uri, user should call parseWavesUri directly for extra details
+  return null; // return null, data is not usable/valid
 }
 
-void showAlertDialog(BuildContext context, String msg, {bool showCancel: false, Function()? onCancel: null}) {
+void showAlertDialog(BuildContext context, String msg,
+    {bool showCancel: false, Function()? onCancel: null}) {
   var alert = AlertDialog(
-    content: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [Row(
-        children: [
-            CircularProgressIndicator(),
-            SizedBox(width: 10),
-            Flexible(child: Text(msg, maxLines: 3))
-        ]),
-        showCancel ? raisedButton(onPressed: onCancel, child: Text('Cancel')) : SizedBox()
-      ])
-  );
-  showDialog(barrierDismissible: false,
+      content: Column(mainAxisSize: MainAxisSize.min, children: [
+    Row(children: [
+      CircularProgressIndicator(),
+      SizedBox(width: 10),
+      Flexible(child: Text(msg, maxLines: 3))
+    ]),
+    showCancel
+        ? raisedButton(onPressed: onCancel, child: Text('Cancel'))
+        : SizedBox()
+  ]));
+  showDialog(
+    barrierDismissible: false,
     context: context,
     builder: (BuildContext context) {
       return alert;
@@ -181,9 +187,7 @@ Future<void> alert(BuildContext context, String title, dynamic content) {
         content: content is Widget ? content : Text('$content'),
         actions: <Widget>[
           raisedButton(
-            child: Text("Ok"),
-            onPressed: () => Navigator.of(context).pop()
-          ),
+              child: Text("Ok"), onPressed: () => Navigator.of(context).pop()),
         ],
       );
     },
@@ -193,8 +197,7 @@ Future<void> alert(BuildContext context, String title, dynamic content) {
 Future<String?> askString(BuildContext context, String title, String? value) {
   final formKey = GlobalKey<FormState>();
   final txtController = new TextEditingController();
-  if (value != null)
-    txtController.text = value;
+  if (value != null) txtController.text = value;
 
   void submit() {
     var cs = formKey.currentState;
@@ -223,15 +226,16 @@ Future<String?> askString(BuildContext context, String title, String? value) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 raisedButtonIcon(
-                    onPressed: () { Navigator.pop(context); },
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     icon: Icon(Icons.cancel),
                     label: Text('Cancel')),
                 raisedButtonIcon(
                     onPressed: submit,
                     icon: Icon(Icons.send),
                     label: Text('Submit')),
-              ]
-          ),
+              ]),
         ],
       ),
     );
@@ -294,18 +298,19 @@ Future<String?> askSetMnemonicPassword(BuildContext context) async {
             },
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              raisedButtonIcon(
-                  onPressed: () { Navigator.pop(context); },
-                  icon: Icon(Icons.cancel),
-                  label: Text('Cancel')),
-              raisedButtonIcon(
-                  onPressed: submit,
-                  icon: Icon(Icons.lock),
-                  label: Text('Submit')),
-            ]
-          ),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                raisedButtonIcon(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.cancel),
+                    label: Text('Cancel')),
+                raisedButtonIcon(
+                    onPressed: submit,
+                    icon: Icon(Icons.lock),
+                    label: Text('Submit')),
+              ]),
         ],
       ),
     );
@@ -355,15 +360,16 @@ Future<String?> askMnemonicPassword(BuildContext context) async {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 raisedButtonIcon(
-                    onPressed: () { Navigator.pop(context); },
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     icon: Icon(Icons.cancel),
                     label: Text('Cancel')),
                 raisedButtonIcon(
                     onPressed: submit,
                     icon: Icon(Icons.lock),
                     label: Text('Submit')),
-              ]
-          ),
+              ]),
         ],
       ),
     );
@@ -390,15 +396,18 @@ Future<bool> askYesNo(BuildContext context, String question) async {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               raisedButtonIcon(
-                  onPressed: () { Navigator.pop(context, false); },
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
                   icon: Icon(Icons.cancel),
                   label: Text('No')),
               raisedButtonIcon(
-                  onPressed: () { Navigator.pop(context, true); },
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
                   icon: Icon(Icons.check),
                   label: Text('Yes')),
-            ]
-          ),
+            ]),
       );
     },
   );
@@ -413,17 +422,16 @@ class EncryptedMnemonic {
 
 Key padKey256(Key key) {
   var bytes = <int>[];
-  for (var byte in key.bytes)
-    bytes.add(byte);
-  while (bytes.length < 256/8)
-    bytes.add(0);
+  for (var byte in key.bytes) bytes.add(byte);
+  while (bytes.length < 256 / 8) bytes.add(0);
   return Key(Uint8List.fromList(bytes));
 }
 
 EncryptedMnemonic encryptMnemonic(String mnemonic, String password) {
   final key = padKey256(Key.fromUtf8(password));
   final random = Random.secure();
-  final ivData = Uint8List.fromList(List<int>.generate(16, (i) => random.nextInt(256)));
+  final ivData =
+      Uint8List.fromList(List<int>.generate(16, (i) => random.nextInt(256)));
   final iv = IV(ivData);
 
   final encrypter = Encrypter(AES(key));
@@ -432,45 +440,49 @@ EncryptedMnemonic encryptMnemonic(String mnemonic, String password) {
   return EncryptedMnemonic(encrypted.base64, iv.base64);
 }
 
-String? decryptMnemonic(String encryptedMnemonicBase64, String ivBase64, String password) {
+String? decryptMnemonic(
+    String encryptedMnemonicBase64, String ivBase64, String password) {
   final key = padKey256(Key.fromUtf8(password));
   final iv = IV.fromBase64(ivBase64);
 
   final encrypter = Encrypter(AES(key));
   try {
     return encrypter.decrypt64(encryptedMnemonicBase64, iv: iv);
-  }
-  catch (ex) {
+  } catch (ex) {
     return null;
   }
 }
 
-const String _bitcoinAlphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+const String _bitcoinAlphabet =
+    "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 List<int> base58decode(String input) {
   Base58Codec codec = const Base58Codec(_bitcoinAlphabet);
   return codec.decode(input);
 }
+
 String base58decodeString(String input) {
   return String.fromCharCodes(base58decode(input));
 }
+
 String base58encode(List<int> input) {
   Base58Codec codec = const Base58Codec(_bitcoinAlphabet);
   return codec.encode(input);
 }
 
 Future<bool> pinCheck(BuildContext context, String? pin) async {
-  if (pin == null || pin == '')
-    return true;
+  if (pin == null || pin == '') return true;
   var pin2 = await Navigator.push<String>(
     context,
-    MaterialPageRoute(
-      builder: (context) => PinEntryScreen(pin, 'Enter Pin')),
+    MaterialPageRoute(builder: (context) => PinEntryScreen(pin, 'Enter Pin')),
   );
   return pin == pin2;
 }
 
-Future<http.Response> httpPost(Uri uri, dynamic body, {String contentType = 'application/json', Map<String, String>? extraHeaders}) async {
-  if (contentType != 'application/x-www-form-urlencoded' && contentType != 'application/json')
+Future<http.Response> httpPost(Uri uri, dynamic body,
+    {String contentType = 'application/json',
+    Map<String, String>? extraHeaders}) async {
+  if (contentType != 'application/x-www-form-urlencoded' &&
+      contentType != 'application/json')
     throw FormatException('content type not supported');
   var headers = {'Content-Type': contentType};
   if (extraHeaders != null)
@@ -479,7 +491,7 @@ Future<http.Response> httpPost(Uri uri, dynamic body, {String contentType = 'app
     }
   // http.post will url encode params automatically for application/x-www-form-urlencoded
   if (body is! String && contentType == 'application/json')
-      body = jsonEncode(body);
+    body = jsonEncode(body);
   var r = RetryOptions(maxAttempts: 4);
   return await r.retry(
     () => http.post(uri, headers: headers, body: body),
@@ -487,7 +499,8 @@ Future<http.Response> httpPost(Uri uri, dynamic body, {String contentType = 'app
   );
 }
 
-Future<http.Response> httpGet(Uri uri, {Map<String, String>? extraHeaders}) async {
+Future<http.Response> httpGet(Uri uri,
+    {Map<String, String>? extraHeaders}) async {
   var r = RetryOptions(maxAttempts: 4);
   return await r.retry(
     () => http.get(uri, headers: extraHeaders),
@@ -499,8 +512,7 @@ void dismissKeyboard(BuildContext context) {
   // unfocus any text fields when touching non interactive part of app
   // this should hide any keyboards
   var currentFocus = FocusScope.of(context);
-  if (!currentFocus.hasPrimaryFocus &&
-      currentFocus.focusedChild != null) {
+  if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 }

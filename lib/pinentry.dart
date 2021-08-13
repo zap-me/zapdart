@@ -37,86 +37,93 @@ class _PinEntryState extends State<PinEntryScreen> {
       ),
       body: Container(
         child: SingleChildScrollView(
-          child: Center(child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(bottom: 60.0),
-              ),
-              Container(
-                height: 100,
-                child: PinCodeTextField(
-                  autofocus: true,
-                  controller: _controller,
-                  focusNode: _focusNode,
-                  hideCharacter: true,
-                  highlight: true,
-                  highlightColor: ZapBlue,
-                  defaultBorderColor: ZapBlack,
-                  hasTextBorderColor: ZapGreen,
-                  maxLength: _pinLength,
-                  hasError: _hasError,
-                  maskCharacter: "*",
-                  onTextChanged: (text) {
-                    if (_done) {
-                      _done = false;
-                    } else {
-                      setState(() {
-                        _hasError = false;
-                      });
-                    }
-                  },
-                  onDone: (text) {
-                    if (widget._pin.isNotEmpty) {
-                      if (text != widget._pin) {
-                        _done = true;
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 60.0),
+                ),
+                Container(
+                  height: 100,
+                  child: PinCodeTextField(
+                    autofocus: true,
+                    controller: _controller,
+                    focusNode: _focusNode,
+                    hideCharacter: true,
+                    highlight: true,
+                    highlightColor: ZapBlue,
+                    defaultBorderColor: ZapBlack,
+                    hasTextBorderColor: ZapGreen,
+                    maxLength: _pinLength,
+                    hasError: _hasError,
+                    maskCharacter: "*",
+                    onTextChanged: (text) {
+                      if (_done) {
+                        _done = false;
+                      } else {
                         setState(() {
-                          _errorMessage = "Invalid pin";
-                          _hasError = true;
+                          _hasError = false;
                         });
-                        return;
                       }
-                    }
-                    Future.delayed(Duration(milliseconds: _animDelay), () {
-                      Navigator.pop(context, text);
-                    });
-                  },
-                  wrapAlignment: WrapAlignment.spaceAround,
-                  pinBoxDecoration: ProvidedPinBoxDecoration.defaultPinBoxDecoration,
-                  pinTextStyle: TextStyle(fontSize: 30.0),
-                  pinTextAnimatedSwitcherTransition: ProvidedPinBoxTextAnimation.scalingTransition,
-                  pinTextAnimatedSwitcherDuration: Duration(milliseconds: _animDelay),
-                  highlightAnimationBeginColor: ZapBlack,
-                  highlightAnimationEndColor: ZapWhite,
-                  keyboardType: TextInputType.number,
-                  pinBoxWidth: 50,
-                  pinBoxHeight: 50,
+                    },
+                    onDone: (text) {
+                      if (widget._pin.isNotEmpty) {
+                        if (text != widget._pin) {
+                          _done = true;
+                          setState(() {
+                            _errorMessage = "Invalid pin";
+                            _hasError = true;
+                          });
+                          return;
+                        }
+                      }
+                      Future.delayed(Duration(milliseconds: _animDelay), () {
+                        Navigator.pop(context, text);
+                      });
+                    },
+                    wrapAlignment: WrapAlignment.spaceAround,
+                    pinBoxDecoration:
+                        ProvidedPinBoxDecoration.defaultPinBoxDecoration,
+                    pinTextStyle: TextStyle(fontSize: 30.0),
+                    pinTextAnimatedSwitcherTransition:
+                        ProvidedPinBoxTextAnimation.scalingTransition,
+                    pinTextAnimatedSwitcherDuration:
+                        Duration(milliseconds: _animDelay),
+                    highlightAnimationBeginColor: ZapBlack,
+                    highlightAnimationEndColor: ZapWhite,
+                    keyboardType: TextInputType.number,
+                    pinBoxWidth: 50,
+                    pinBoxHeight: 50,
+                  ),
                 ),
-
-              ),
-              Visibility(
-                visible: _hasError,
-                child: Text(_errorMessage, style: TextStyle(color: ZapRed),),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 32.0),
-                child: Wrap(
-                  alignment: WrapAlignment.spaceEvenly,
-                  children: <Widget>[
-                    MaterialButton(
-                      color: ZapYellow,
-                      textColor: ZapWhite,
-                      child: Text("Clear"),
-                      onPressed: () {
-                        _controller.clear();
-                        _focusNode.requestFocus();
-                      },
-                    ),
-                  ],
+                Visibility(
+                  visible: _hasError,
+                  child: Text(
+                    _errorMessage,
+                    style: TextStyle(color: ZapRed),
+                  ),
                 ),
-              )
-            ],
-          ),),
+                Padding(
+                  padding: const EdgeInsets.only(top: 32.0),
+                  child: Wrap(
+                    alignment: WrapAlignment.spaceEvenly,
+                    children: <Widget>[
+                      MaterialButton(
+                        color: ZapYellow,
+                        textColor: ZapWhite,
+                        child: Text("Clear"),
+                        onPressed: () {
+                          _controller.clear();
+                          _focusNode.requestFocus();
+                        },
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

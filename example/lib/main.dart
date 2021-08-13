@@ -17,20 +17,31 @@ class Demo extends StatelessWidget {
     print(window.physicalSize);
 
     return Material(
-      child: ListView(children: [
-        ListTile(title: Text('UniversalPlatform'), subtitle: Text(
-          'Web: ${UniversalPlatform.isWeb} \n '
-          'MacOS: ${UniversalPlatform.isMacOS} \n'
-          'Windows: ${UniversalPlatform.isWindows} \n'
-          'Linux: ${UniversalPlatform.isLinux} \n'
-          'Android: ${UniversalPlatform.isAndroid} \n'
-          'IOS: ${UniversalPlatform.isIOS} \n'
-          'Fuschia: ${UniversalPlatform.isFuchsia} \n',
-        )),
-        ListTile(title: Text('Libzap version'), subtitle: Text('${LibZap().version()}, ${(LibZap()).toString()}')),
-        ListTile(title: Text('raisedButton'), subtitle: raisedButton(onPressed: () => alert(context, 'hello', 'world'), child: Text('Button'))),
-        ListTile(title: Text('RoundedButton'), subtitle: RoundedButton(() => alert(context, 'hello', 'world'), ZapWhite, ZapBlue, ZapBlueGradient, 'Button', holePunch: true)),
-      ])
-    );
+        child: ListView(children: [
+      ListTile(
+          title: Text('UniversalPlatform'),
+          subtitle: Text(
+            'Web: ${UniversalPlatform.isWeb} \n '
+            'MacOS: ${UniversalPlatform.isMacOS} \n'
+            'Windows: ${UniversalPlatform.isWindows} \n'
+            'Linux: ${UniversalPlatform.isLinux} \n'
+            'Android: ${UniversalPlatform.isAndroid} \n'
+            'IOS: ${UniversalPlatform.isIOS} \n'
+            'Fuschia: ${UniversalPlatform.isFuchsia} \n',
+          )),
+      ListTile(
+          title: Text('Libzap version'),
+          subtitle: Text('${LibZap().version()}, ${(LibZap()).toString()}')),
+      ListTile(
+          title: Text('raisedButton'),
+          subtitle: raisedButton(
+              onPressed: () => alert(context, 'hello', 'world'),
+              child: Text('Button'))),
+      ListTile(
+          title: Text('RoundedButton'),
+          subtitle: RoundedButton(() => alert(context, 'hello', 'world'),
+              ZapWhite, ZapBlue, ZapBlueGradient, 'Button',
+              holePunch: true)),
+    ]));
   }
 }

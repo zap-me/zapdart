@@ -11,8 +11,7 @@ import 'dylib_utils.dart';
 void copyInto(Pointer<Uint8> buf, int offset, Iterable<int> data) {
   assert(buf != nullptr);
   var n = 0;
-  for (var byte in data)
-    buf.elementAt(offset + n++).value = byte;
+  for (var byte in data) buf.elementAt(offset + n++).value = byte;
 }
 
 /// Read the buffer from C memory into Dart.
@@ -24,7 +23,8 @@ List<int> toIntList(Pointer<Uint8> buf, int len) {
 extension BufferWranglingTx on Tx {
   static final textFieldSize = 1024;
   static final int64FieldSize = 8;
-  static final totalSize = int64FieldSize + textFieldSize * 6 + int64FieldSize * 3;
+  static final totalSize =
+      int64FieldSize + textFieldSize * 6 + int64FieldSize * 3;
 
   Pointer<Uint8> toBuffer() {
     var buf = calloc<Uint8>(totalSize);
@@ -52,8 +52,7 @@ extension BufferWranglingTx on Tx {
     copyInto(buf, offset, utf8.encode(feeAsset));
     offset += textFieldSize;
     // attachment field
-    if (attachment != null)
-      copyInto(buf, offset, utf8.encode(attachment!));
+    if (attachment != null) copyInto(buf, offset, utf8.encode(attachment!));
     offset += textFieldSize;
     // amount field
     intByteData.setInt64(0, amount);
@@ -75,7 +74,10 @@ extension BufferWranglingTx on Tx {
     var ints = toIntList(buf, totalSize);
     int offset = 0;
 
-    var type = Int8List.fromList(ints).buffer.asByteData().getInt64(offset, Endian.little);
+    var type = Int8List.fromList(ints)
+        .buffer
+        .asByteData()
+        .getInt64(offset, Endian.little);
     offset += 8;
     var id = intListToString(ints, offset, textFieldSize);
     offset += textFieldSize;
@@ -89,14 +91,24 @@ extension BufferWranglingTx on Tx {
     offset += textFieldSize;
     var attachment = intListToString(ints, offset, textFieldSize);
     offset += textFieldSize;
-    var amount = Int8List.fromList(ints).buffer.asByteData().getInt64(offset, Endian.little);
+    var amount = Int8List.fromList(ints)
+        .buffer
+        .asByteData()
+        .getInt64(offset, Endian.little);
     offset += 8;
-    var fee = Int8List.fromList(ints).buffer.asByteData().getInt64(offset, Endian.little);
+    var fee = Int8List.fromList(ints)
+        .buffer
+        .asByteData()
+        .getInt64(offset, Endian.little);
     offset += 8;
-    var timestamp = Int8List.fromList(ints).buffer.asByteData().getInt64(offset, Endian.little);
+    var timestamp = Int8List.fromList(ints)
+        .buffer
+        .asByteData()
+        .getInt64(offset, Endian.little);
     offset += 8;
 
-    return Tx(type, id, sender, recipient, assetId, feeAsset, attachment, amount, fee, timestamp);
+    return Tx(type, id, sender, recipient, assetId, feeAsset, attachment,
+        amount, fee, timestamp);
   }
 
   static Iterable<Tx> fromBufferMulti(Pointer<Uint8> buf, int count) {
@@ -106,7 +118,7 @@ extension BufferWranglingTx on Tx {
     });
   }
 
-  static Pointer<Uint8> allocateMem({int count=1}) {
+  static Pointer<Uint8> allocateMem({int count = 1}) {
     return calloc<Uint8>(totalSize * count);
   }
 }
@@ -115,7 +127,8 @@ extension BufferWranglingSpendTx on SpendTx {
   static final int32FieldSize = 4;
   static final dataFieldSize = 364;
   static final sigFieldSize = 64;
-  static final totalSize = int32FieldSize + dataFieldSize + int32FieldSize + sigFieldSize;
+  static final totalSize =
+      int32FieldSize + dataFieldSize + int32FieldSize + sigFieldSize;
 
   Pointer<Uint8> toBuffer() {
     var buf = calloc<Uint8>(totalSize);
@@ -139,11 +152,17 @@ extension BufferWranglingSpendTx on SpendTx {
   static SpendTx fromBuffer(Pointer<Uint8> buf) {
     var ints = toIntList(buf, totalSize);
 
-    var success = Int8List.fromList(ints).buffer.asByteData().getInt32(0, Endian.little);
-    var dataSize = Int8List.fromList(ints).buffer.asByteData().getInt32(int32FieldSize + dataFieldSize, Endian.little);
+    var success =
+        Int8List.fromList(ints).buffer.asByteData().getInt32(0, Endian.little);
+    var dataSize = Int8List.fromList(ints)
+        .buffer
+        .asByteData()
+        .getInt32(int32FieldSize + dataFieldSize, Endian.little);
     assert(dataSize >= 0 && dataSize <= dataFieldSize);
     var data = ints.skip(int32FieldSize).take(dataSize);
-    var sig = ints.skip(int32FieldSize + dataFieldSize + int32FieldSize).take(sigFieldSize);
+    var sig = ints
+        .skip(int32FieldSize + dataFieldSize + int32FieldSize)
+        .take(sigFieldSize);
 
     return SpendTx(success != 0, data, sig);
   }
@@ -161,7 +180,8 @@ extension BufferWranglingSig on Signature {
   static Signature fromBuffer(Pointer<Uint8> buf) {
     var ints = toIntList(buf, totalSize);
 
-    var success = Int8List.fromList(ints).buffer.asByteData().getInt32(0, Endian.little);
+    var success =
+        Int8List.fromList(ints).buffer.asByteData().getInt32(0, Endian.little);
     var sig = ints.skip(int32FieldSize).take(sigFieldSize);
 
     return Signature(success != 0, sig);
@@ -219,7 +239,8 @@ typedef lzap_asset_id_get_t = Pointer<Utf8> Function();
 typedef lzap_asset_id_set_native_t = Int8 Function(Pointer<Utf8> assetId);
 typedef lzap_asset_id_set_t = int Function(Pointer<Utf8> assetId);
 
-typedef lzap_mnemonic_create_native_t = Int8 Function(Pointer<Utf8> output, Int32 size);
+typedef lzap_mnemonic_create_native_t = Int8 Function(
+    Pointer<Utf8> output, Int32 size);
 typedef lzap_mnemonic_create_t = int Function(Pointer<Utf8> output, int size);
 typedef lzap_mnemonic_wordlist_t = Pointer<Pointer<Utf8>> Function();
 
@@ -227,8 +248,10 @@ typedef lzap_mnemonic_check_native_t = Int8 Function(Pointer<Utf8> mnemonic);
 typedef lzap_mnemonic_check_t = int Function(Pointer<Utf8> mnemonic);
 
 //TODO: this function does not actually return anything, but dart:ffi does not seem to handle void functions yet
-typedef lzap_seed_address_native_t = Int32 Function(Pointer<Utf8> seed, Pointer<Utf8> output);
-typedef lzap_seed_address_t = int Function(Pointer<Utf8> seed, Pointer<Utf8> output);
+typedef lzap_seed_address_native_t = Int32 Function(
+    Pointer<Utf8> seed, Pointer<Utf8> output);
+typedef lzap_seed_address_t = int Function(
+    Pointer<Utf8> seed, Pointer<Utf8> output);
 
 typedef lzap_address_check_native_t = IntResult Function(Pointer<Utf8> address);
 //TODO: ns version
@@ -236,27 +259,55 @@ typedef lzap_address_check_ns_native_t = Int8 Function(Pointer<Utf8> address);
 typedef lzap_address_check_ns_t = int Function(Pointer<Utf8> address);
 
 //TODO: ns version
-typedef lzap_address_balance_ns_native_t = Int8 Function(Pointer<Utf8> address, Pointer<Int64> balanceOut);
-typedef lzap_address_balance_ns_t = int Function(Pointer<Utf8> address, Pointer<Int64> balanceOut);
+typedef lzap_address_balance_ns_native_t = Int8 Function(
+    Pointer<Utf8> address, Pointer<Int64> balanceOut);
+typedef lzap_address_balance_ns_t = int Function(
+    Pointer<Utf8> address, Pointer<Int64> balanceOut);
 
 //TODO: ns version of transaction list
-typedef lzap_address_transactions2_ns_native_t = Int8 Function(Pointer<Utf8> address, Pointer<Uint8> txs, Int32 count, Pointer<Utf8> after, Pointer<Int64> countOut);
-typedef lzap_address_transactions2_ns_t = int Function(Pointer<Utf8> address, Pointer<Uint8> txs, int count, Pointer<Utf8> after, Pointer<Int64> countOut);
+typedef lzap_address_transactions2_ns_native_t = Int8 Function(
+    Pointer<Utf8> address,
+    Pointer<Uint8> txs,
+    Int32 count,
+    Pointer<Utf8> after,
+    Pointer<Int64> countOut);
+typedef lzap_address_transactions2_ns_t = int Function(
+    Pointer<Utf8> address,
+    Pointer<Uint8> txs,
+    int count,
+    Pointer<Utf8> after,
+    Pointer<Int64> countOut);
 
 typedef lzap_transaction_fee_ns_native_t = Int8 Function(Pointer<Int64> feeOut);
 typedef lzap_transaction_Fee_ns_t = int Function(Pointer<Int64> feeOut);
 
 //TODO: this function does not actually return anything, but dart:ffi does not seem to handle void functions yet
-typedef lzap_transaction_create_ns_native_t = Int32 Function(Pointer<Utf8> seed, Pointer<Utf8> recipient, Int64 amount, Int64 fee, Pointer<Utf8> attachment, Pointer<Uint8> spendTxOut);
-typedef lzap_transaction_create_ns_t = int Function(Pointer<Utf8> seed, Pointer<Utf8> recipient, int amount, int fee, Pointer<Utf8> attachment, Pointer<Uint8> spendTxOut);
+typedef lzap_transaction_create_ns_native_t = Int32 Function(
+    Pointer<Utf8> seed,
+    Pointer<Utf8> recipient,
+    Int64 amount,
+    Int64 fee,
+    Pointer<Utf8> attachment,
+    Pointer<Uint8> spendTxOut);
+typedef lzap_transaction_create_ns_t = int Function(
+    Pointer<Utf8> seed,
+    Pointer<Utf8> recipient,
+    int amount,
+    int fee,
+    Pointer<Utf8> attachment,
+    Pointer<Uint8> spendTxOut);
 
 //TODO: ns version of transaction broadcast!!!
-typedef lzap_transaction_broadcast_ns_native_t = Int32 Function(Pointer<Uint8> spendTx, Pointer<Uint8> broadcastTxOut);
-typedef lzap_transaction_broadcast_ns_t = int Function(Pointer<Uint8> spendTx, Pointer<Uint8> broadcastTxOut);
+typedef lzap_transaction_broadcast_ns_native_t = Int32 Function(
+    Pointer<Uint8> spendTx, Pointer<Uint8> broadcastTxOut);
+typedef lzap_transaction_broadcast_ns_t = int Function(
+    Pointer<Uint8> spendTx, Pointer<Uint8> broadcastTxOut);
 
 //TODO: ns version of transaction broadcast!!!
-typedef lzap_message_sign_ns_native_t = Int32 Function(Pointer<Utf8> seed, Pointer<Uint8> message, Int32 messageSize, Pointer<Uint8> signatureOut);
-typedef lzap_message_sign_ns_t = int Function(Pointer<Utf8> seed, Pointer<Uint8> message, int messageSize, Pointer<Uint8> signatureOut);
+typedef lzap_message_sign_ns_native_t = Int32 Function(Pointer<Utf8> seed,
+    Pointer<Uint8> message, Int32 messageSize, Pointer<Uint8> signatureOut);
+typedef lzap_message_sign_ns_t = int Function(Pointer<Utf8> seed,
+    Pointer<Uint8> message, int messageSize, Pointer<Uint8> signatureOut);
 
 //
 // helper functions
@@ -265,8 +316,7 @@ typedef lzap_message_sign_ns_t = int Function(Pointer<Utf8> seed, Pointer<Uint8>
 String intListToString(Iterable<int> lst, int offset, int count) {
   lst = lst.skip(offset).take(count);
   int len = 0;
-  while (lst.elementAt(len) != 0)
-    len++;
+  while (lst.elementAt(len) != 0) len++;
   return Utf8Decoder().convert(lst.take(len).toList());
 }
 
@@ -292,18 +342,18 @@ AddrTxsResult addressTransactionsFromIsolate(AddrTxsRequest req) {
   var addrC = req.address.toNativeUtf8();
   var txsC = BufferWranglingTx.allocateMem(count: req.count);
   Pointer<Utf8> afterC = nullptr;
-  if (req.after != null)
-    afterC = req.after!.toNativeUtf8();
+  if (req.after != null) afterC = req.after!.toNativeUtf8();
   var countOutP = calloc<Int64>();
-  var res = libzap.lzapAddressTransactions(addrC, txsC, req.count, afterC, countOutP) != 0;
+  var res = libzap.lzapAddressTransactions(
+          addrC, txsC, req.count, afterC, countOutP) !=
+      0;
   Iterable<Tx> txs = [];
   if (res) {
     int count = countOutP.value;
     txs = BufferWranglingTx.fromBufferMulti(txsC, count);
   }
   calloc.free(countOutP);
-  if (req.after != null)
-    calloc.free(afterC);
+  if (req.after != null) calloc.free(afterC);
   calloc.free(txsC);
   calloc.free(addrC);
   return AddrTxsResult(res, txs);
@@ -330,8 +380,7 @@ Tx? transactionBroadcastFromIsolate(SpendTx spendTx) {
   var txC = BufferWranglingTx.allocateMem();
   var result = libzap.lzapTransactionBroadcast(spendTxC, txC);
   Tx? tx;
-  if (result != 0)
-    tx = BufferWranglingTx.fromBuffer(txC);
+  if (result != 0) tx = BufferWranglingTx.fromBuffer(txC);
   calloc.free(txC);
   calloc.free(spendTxC);
   return tx;
@@ -344,7 +393,6 @@ LibZap getLibZap() => LibZapImpl();
 //
 
 class LibZapImpl implements LibZap {
-
   LibZapImpl() {
     libzap = dlopenPlatformSpecific("zap");
     lzapVersion = libzap
@@ -369,38 +417,48 @@ class LibZapImpl implements LibZap {
         .lookup<NativeFunction<lzap_asset_id_set_native_t>>("lzap_asset_id_set")
         .asFunction();
     lzapMnemonicCreate = libzap
-        .lookup<NativeFunction<lzap_mnemonic_create_native_t>>("lzap_mnemonic_create")
+        .lookup<NativeFunction<lzap_mnemonic_create_native_t>>(
+            "lzap_mnemonic_create")
         .asFunction();
     lzapMnemonicCheck = libzap
-        .lookup<NativeFunction<lzap_mnemonic_check_native_t>>("lzap_mnemonic_check")
+        .lookup<NativeFunction<lzap_mnemonic_check_native_t>>(
+            "lzap_mnemonic_check")
         .asFunction();
     lzapMnemonicWordlist = libzap
-        .lookup<NativeFunction<lzap_mnemonic_wordlist_t>>("lzap_mnemonic_wordlist")
+        .lookup<NativeFunction<lzap_mnemonic_wordlist_t>>(
+            "lzap_mnemonic_wordlist")
         .asFunction();
 
     lzapSeedAddress = libzap
         .lookup<NativeFunction<lzap_seed_address_native_t>>("lzap_seed_address")
         .asFunction();
     lzapAddressCheck = libzap
-        .lookup<NativeFunction<lzap_address_check_ns_native_t>>("lzap_address_check_ns")
+        .lookup<NativeFunction<lzap_address_check_ns_native_t>>(
+            "lzap_address_check_ns")
         .asFunction();
     lzapAddressBalance = libzap
-        .lookup<NativeFunction<lzap_address_balance_ns_native_t>>("lzap_address_balance_ns")
+        .lookup<NativeFunction<lzap_address_balance_ns_native_t>>(
+            "lzap_address_balance_ns")
         .asFunction();
     lzapAddressTransactions = libzap
-        .lookup<NativeFunction<lzap_address_transactions2_ns_native_t>>("lzap_address_transactions2_ns")
+        .lookup<NativeFunction<lzap_address_transactions2_ns_native_t>>(
+            "lzap_address_transactions2_ns")
         .asFunction();
     lzapTransactionFee = libzap
-        .lookup<NativeFunction<lzap_transaction_fee_ns_native_t>>("lzap_transaction_fee_ns")
+        .lookup<NativeFunction<lzap_transaction_fee_ns_native_t>>(
+            "lzap_transaction_fee_ns")
         .asFunction();
     lzapTransactionCreate = libzap
-        .lookup<NativeFunction<lzap_transaction_create_ns_native_t>>("lzap_transaction_create_ns")
+        .lookup<NativeFunction<lzap_transaction_create_ns_native_t>>(
+            "lzap_transaction_create_ns")
         .asFunction();
     lzapTransactionBroadcast = libzap
-        .lookup<NativeFunction<lzap_transaction_broadcast_ns_native_t>>("lzap_transaction_broadcast_ns")
+        .lookup<NativeFunction<lzap_transaction_broadcast_ns_native_t>>(
+            "lzap_transaction_broadcast_ns")
         .asFunction();
     lzapMessageSign = libzap
-        .lookup<NativeFunction<lzap_message_sign_ns_native_t>>("lzap_message_sign_ns")
+        .lookup<NativeFunction<lzap_message_sign_ns_native_t>>(
+            "lzap_message_sign_ns")
         .asFunction();
   }
 
@@ -473,11 +531,11 @@ class LibZapImpl implements LibZap {
     calloc.free(valueC);
   }
 
-bool networkParamsSet(String? assetIdMainnet, String? assetIdTestnet, String? nodeUrlMainnet, String? nodeUrlTestnet, bool testnet) {
+  bool networkParamsSet(String? assetIdMainnet, String? assetIdTestnet,
+      String? nodeUrlMainnet, String? nodeUrlTestnet, bool testnet) {
     var result = true;
     print('testnetSet($testnet)..');
-    if (!testnetSet(testnet))
-      result =  false;
+    if (!testnetSet(testnet)) result = false;
     if (testnet && assetIdTestnet != null) {
       print('assetIdSet("$assetIdTestnet")..');
       assetIdSet(assetIdTestnet);
@@ -490,16 +548,13 @@ bool networkParamsSet(String? assetIdMainnet, String? assetIdTestnet, String? no
     }
     if (testnet && nodeUrlTestnet != null) {
       print('nodeSet("$nodeUrlTestnet")..');
-      if (!nodeSet(nodeUrlTestnet))
-        result =  false;
+      if (!nodeSet(nodeUrlTestnet)) result = false;
     } else if (!testnet && nodeUrlMainnet != null) {
       print('nodeSet("$nodeUrlMainnet")..');
-      if (!nodeSet(nodeUrlMainnet))
-        result =  false;
+      if (!nodeSet(nodeUrlMainnet)) result = false;
     } else {
       print('nodeSet("")..');
-      if (!nodeSet(''))
-        result =  false;
+      if (!nodeSet('')) result = false;
     }
     print('networkParamsSet = $result');
     return result;
@@ -511,8 +566,7 @@ bool networkParamsSet(String? assetIdMainnet, String? assetIdTestnet, String? no
     var res = lzapMnemonicCreate(outputC, 1024);
     var mnemonic = outputC.toDartString();
     calloc.free(outputC);
-    if (res != 0)
-      return mnemonic;
+    if (res != 0) return mnemonic;
     return null;
   }
 
@@ -555,19 +609,21 @@ bool networkParamsSet(String? assetIdMainnet, String? assetIdTestnet, String? no
     return compute(addressBalanceFromIsolate, address);
   }
 
-  Future<AddrTxsResult> addressTransactions(String address, int count, String? after) async {
-    return compute(addressTransactionsFromIsolate, AddrTxsRequest(address, count, after));
+  Future<AddrTxsResult> addressTransactions(
+      String address, int count, String? after) async {
+    return compute(
+        addressTransactionsFromIsolate, AddrTxsRequest(address, count, after));
   }
 
   Future<IntResult> transactionFee() async {
     return compute(transactionFeeFromIsolate, 0);
   }
 
-  SpendTx transactionCreate(String seed, String recipient, int amount, int fee, String? attachment) {
+  SpendTx transactionCreate(
+      String seed, String recipient, int amount, int fee, String? attachment) {
     var seedC = seed.toNativeUtf8();
     var recipientC = recipient.toNativeUtf8();
-    if (attachment == null)
-      attachment = "";
+    if (attachment == null) attachment = "";
     var attachmentC = attachment.toNativeUtf8();
     var outputC = BufferWranglingSpendTx.allocateMem();
     lzapTransactionCreate(seedC, recipientC, amount, fee, attachmentC, outputC);

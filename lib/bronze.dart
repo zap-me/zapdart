@@ -5,13 +5,9 @@ import 'utils.dart';
 
 var baseUrl = "https://test.bronze.exchange/api/v1/";
 
-enum Side { 
-   buy, 
-   sell 
-}
+enum Side { buy, sell }
 
-class MarketDepthItem
-{
+class MarketDepthItem {
   Decimal price;
   Decimal amount;
   MarketDepthItem(this.price, this.amount);
@@ -34,7 +30,8 @@ class MarketDepth {
   }
 }
 
-Future<Decimal> equivalentZapForNzd(Decimal nzdReqOrProvided, Side zapSide) async {
+Future<Decimal> equivalentZapForNzd(
+    Decimal nzdReqOrProvided, Side zapSide) async {
   var url = baseUrl + "MarketDepth";
   var body = convert.jsonEncode({"market": "ZAPNZD", "merge": "0.01"});
   var response = await httpPost(Uri.parse(url), body);
@@ -49,13 +46,11 @@ Future<Decimal> equivalentZapForNzd(Decimal nzdReqOrProvided, Side zapSide) asyn
       // calculate the amount of zap available to buy with the provided NZD
       book = marketDepth.asks;
     for (var item in book) {
-      if (nzdReqOrProvided <= Decimal.fromInt(0))
-        break;
+      if (nzdReqOrProvided <= Decimal.fromInt(0)) break;
       // lower amount if it is too much
       var nzd = item.amount * item.price;
       var amount = item.amount;
-      if (nzd > nzdReqOrProvided)
-        amount = nzdReqOrProvided / nzd * item.amount;
+      if (nzd > nzdReqOrProvided) amount = nzdReqOrProvided / nzd * item.amount;
       // calc amount of zap for this portion of liquidity
       amountZap += amount;
       nzdReqOrProvided -= amount * item.price;

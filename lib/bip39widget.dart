@@ -5,8 +5,8 @@ import 'libzap.dart';
 import 'colors.dart';
 import 'widgets.dart';
 
-typedef WordIndexCallback = void Function(int); 
-typedef WordsCallback = void Function(List<String>); 
+typedef WordIndexCallback = void Function(int);
+typedef WordsCallback = void Function(List<String>);
 
 extension ExtendedIterable<E> on Iterable<E> {
   /// Like Iterable<T>.map but callback have index as second argument
@@ -22,7 +22,9 @@ extension ExtendedIterable<E> on Iterable<E> {
 }
 
 class Bip39Words extends StatelessWidget {
-  Bip39Words(this.words, this.validBip39, this.onWordPressed, {this.rowSize = 4}) : super();
+  Bip39Words(this.words, this.validBip39, this.onWordPressed,
+      {this.rowSize = 4})
+      : super();
 
   final List<String> words;
   final bool validBip39;
@@ -30,7 +32,7 @@ class Bip39Words extends StatelessWidget {
   final int rowSize;
 
   static Bip39Words fromString(String words) {
-    return Bip39Words(words.split(' '), false, (i){});
+    return Bip39Words(words.split(' '), false, (i) {});
   }
 
   @override
@@ -44,27 +46,35 @@ class Bip39Words extends StatelessWidget {
         row = <String>[];
       }
     }
-    if (row.length > 0)
-      rows.add(row);
-    return Center(child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: rows.mapIndex((item, rowIndex) {
-        return Row(mainAxisSize: MainAxisSize.min, children: item.mapIndex((item, index) {
-          return Container(
-            width: 65, height: 30, padding: EdgeInsets.all(1),
-            child: raisedButton(
-              child: Row(children: [
-                Text(' ${rowIndex * rowSize + index + 1}', style: TextStyle(color: ZapBlackLight, fontSize: 8)),
-                Expanded(
-                  child: Center(child: Text(item, style: TextStyle(fontSize: 10)))
-                )]),
-              onPressed: () => onWordPressed(rowIndex * rowSize + index),
-              primary: validBip39 ? ZapGreen.withAlpha(198) : ZapWhite,
-              padding: EdgeInsets.all(2)));
-          }).toList()
-        );
-      }).toList()
-    ));
+    if (row.length > 0) rows.add(row);
+    return Center(
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: rows.mapIndex((item, rowIndex) {
+              return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: item.mapIndex((item, index) {
+                    return Container(
+                        width: 65,
+                        height: 30,
+                        padding: EdgeInsets.all(1),
+                        child: raisedButton(
+                            child: Row(children: [
+                              Text(' ${rowIndex * rowSize + index + 1}',
+                                  style: TextStyle(
+                                      color: ZapBlackLight, fontSize: 8)),
+                              Expanded(
+                                  child: Center(
+                                      child: Text(item,
+                                          style: TextStyle(fontSize: 10))))
+                            ]),
+                            onPressed: () =>
+                                onWordPressed(rowIndex * rowSize + index),
+                            primary:
+                                validBip39 ? ZapGreen.withAlpha(198) : ZapWhite,
+                            padding: EdgeInsets.all(2)));
+                  }).toList());
+            }).toList()));
   }
 }
 
@@ -86,11 +96,10 @@ class _Bip39EntryState extends State<Bip39Entry> {
   var _validBip39 = false;
 
   void clearCandidates() {
-    for (var i = 0; i < _candidates.length; i += 1)
-      _candidates[i] = '';
+    for (var i = 0; i < _candidates.length; i += 1) _candidates[i] = '';
   }
 
-  void chooseWord (String word) {
+  void chooseWord(String word) {
     setState(() {
       clearCandidates();
       _mnemonicWords.add(word);
@@ -125,7 +134,9 @@ class _Bip39EntryState extends State<Bip39Entry> {
       */
 
       // check for words that match the prefix exactly
-      if (value.isNotEmpty && item.length >= value.length && value == item.substring(0, value.length)) {
+      if (value.isNotEmpty &&
+          item.length >= value.length &&
+          value == item.substring(0, value.length)) {
         if (prefixMatched < c.length) {
           // if we have not filled the candidates then just chuck it in the first slot
           c[prefixMatched] = item;
@@ -143,8 +154,7 @@ class _Bip39EntryState extends State<Bip39Entry> {
                 break;
               }
             }
-            if (!inserted)
-              cNew.add(oldItem);
+            if (!inserted) cNew.add(oldItem);
           }
           c = cNew.take(c.length).toList();
         }
@@ -152,13 +162,11 @@ class _Bip39EntryState extends State<Bip39Entry> {
       }
 
       // if we have filled the candidates with prefix matched values then dont bother checking levenstein
-      if (prefixMatched >= c.length)
-        continue;
+      if (prefixMatched >= c.length) continue;
 
       // check for words that are close in terms of levenshtein distance
       var dist = _levenshtein.normalizedDistance(value, item);
-      if (dist > 0.4)
-        continue;
+      if (dist > 0.4) continue;
       // we make prefix matched candidates higher priority then levenshtein distance matched candidates by initializing the candidateIndex here
       var candidateIndex = prefixMatched;
       while (candidateIndex < c.length) {
@@ -195,17 +203,20 @@ class _Bip39EntryState extends State<Bip39Entry> {
         TextField(
           autofocus: true,
           controller: _textController,
-          decoration: InputDecoration(labelText: "Recovery Words",),
+          decoration: InputDecoration(
+            labelText: "Recovery Words",
+          ),
           onChanged: inputChanged,
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: List<Widget>.generate(_candidates.length, (index) {
-            return raisedButton(child: Text(_candidates[index]), onPressed: () => chooseWord(_candidates[index]),
-              primary: ZapYellow.withAlpha(198), minSize: Size(40, 25)
-            ); 
-          })
-        ),
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List<Widget>.generate(_candidates.length, (index) {
+              return raisedButton(
+                  child: Text(_candidates[index]),
+                  onPressed: () => chooseWord(_candidates[index]),
+                  primary: ZapYellow.withAlpha(198),
+                  minSize: Size(40, 25));
+            })),
         Bip39Words(_mnemonicWords, _validBip39, (index) => wordRemove(index))
       ],
     );
