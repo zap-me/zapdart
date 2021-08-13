@@ -15,6 +15,7 @@ dependencies:
     sdk: flutter
 
   # for zapdart (remove when made into proper package)
+  shared_preferences: ^2.0.6
   edit_distance: ^0.5.0-nullsafety.0
   pin_code_text_field: ^1.8.0
   qr_flutter: ^4.0.0
