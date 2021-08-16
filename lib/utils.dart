@@ -9,6 +9,8 @@ import 'package:encrypt/encrypt.dart';
 import 'package:base58check/base58.dart';
 import 'package:retry/retry.dart';
 import 'package:http/http.dart' as http;
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'libzap.dart';
 import 'pinentry.dart';
@@ -515,4 +517,16 @@ void dismissKeyboard(BuildContext context) {
   if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
     FocusManager.instance.primaryFocus?.unfocus();
   }
+}
+
+Future<String> deviceName() async {
+  String? device = 'app';
+  if (UniversalPlatform.isAndroid)
+    device = (await DeviceInfoPlugin().androidInfo).model;
+  if (UniversalPlatform.isIOS)
+    device = (await DeviceInfoPlugin().iosInfo).utsname.machine;
+  if (UniversalPlatform.isWeb)
+    device = (await DeviceInfoPlugin().webBrowserInfo).appName;
+  var date = DateTime.now().toIso8601String().split('T').first;
+  return '$device - $date';
 }
