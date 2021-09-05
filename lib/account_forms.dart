@@ -234,6 +234,8 @@ class AccountRegisterForm extends StatefulWidget {
   final AccountRegistration? registration;
   final String? instructions;
   final bool showName;
+  final bool showImage;
+  final bool showEmail;
   final bool showMobileNumber;
   final String? initialMobileCountry;
   final List<String>? preferredMobileCountries;
@@ -246,6 +248,8 @@ class AccountRegisterForm extends StatefulWidget {
   AccountRegisterForm(this.registration,
       {this.instructions,
       this.showName: true,
+      this.showImage: true,
+      this.showEmail: true,
       this.showMobileNumber: false,
       this.initialMobileCountry,
       this.preferredMobileCountries,
@@ -289,17 +293,18 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
       _firstNameController.text = widget.registration!.firstName;
       _lastNameController.text = widget.registration!.lastName;
       _emailController.text = widget.registration!.email;
-      PhoneNumber.getRegionInfoFromPhoneNumber(
-              widget.registration!.mobileNumber)
-          .then((value) {
-        setState(() {
-          _dialCode = '+${value.dialCode}';
-          _countryCode = value.isoCode;
+      if (widget.registration!.mobileNumber.isNotEmpty)
+        PhoneNumber.getRegionInfoFromPhoneNumber(
+                widget.registration!.mobileNumber)
+            .then((value) {
+          setState(() {
+            _dialCode = '+${value.dialCode}';
+            _countryCode = value.isoCode;
+          });
+          if (value.phoneNumber != null)
+            _mobileNumberController.text =
+                value.phoneNumber!.replaceFirst('+${value.dialCode}', '');
         });
-        if (value.phoneNumber != null)
-          _mobileNumberController.text =
-              value.phoneNumber!.replaceFirst('+${value.dialCode}', '');
-      });
       _addressController.text = widget.registration!.address;
       _currentPasswordController.text = widget.registration!.currentPassword;
       _newPasswordController.text = widget.registration!.newPassword;
@@ -370,24 +375,30 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
                                   return 'Please enter a last name';
                                 return null;
                               })),
-                      AccountImageUpdate(
+                      Visibility(
+                        visible: widget.showImage,
+                        child: AccountImageUpdate(
                           _imgString,
                           _imgType,
                           (img, imgType) => setState(() {
                                 _imgString = img;
                                 _imgType = imgType;
-                              })),
-                      TextFormField(
-                          controller: _emailController,
-                          decoration: InputDecoration(labelText: 'Email'),
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            if (value == null || value.isEmpty)
-                              return 'Please enter an email';
-                            if (!EmailValidator.validate(value))
-                              return 'Invalid email';
-                            return null;
-                          }),
+                              }))
+                      ),
+                      Visibility(
+                        visible: widget.showEmail,
+                        child: TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(labelText: 'Email'),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty)
+                            return 'Please enter an email';
+                          if (!EmailValidator.validate(value))
+                            return 'Invalid email';
+                          return null;
+                        })
+                      ),
                       Visibility(
                           visible: widget.showMobileNumber,
                           child: InternationalPhoneNumberInput(
