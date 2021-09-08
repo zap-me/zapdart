@@ -6,6 +6,11 @@
 # Mac crap
 .DS_Store
 
+# Flutter generated files
+lib/generated_plugin_registrant.dart
+.flutter-plugins
+.flutter-plugins-dependencies
+
 # Files and directories created by pub
 .dart_tool/
 .packages

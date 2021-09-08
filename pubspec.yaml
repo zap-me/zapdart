@@ -15,7 +15,7 @@ dependencies:
     sdk: flutter
 
   # for zapdart (remove when made into proper package)
-  shared_preferences: ^2.0.6
+  shared_preferences: ^2.0.7
   edit_distance: ^0.5.0-nullsafety.0
   pin_code_text_field: ^1.8.0
   qr_flutter: ^4.0.0
@@ -23,11 +23,11 @@ dependencies:
   encrypt: ^5.0.1
   base58check: ^2.0.0
   retry: ^3.1.0
-  decimal: ^1.0.0+1
-  google_fonts: ^2.0.0
+  decimal: ^1.3.0
+  google_fonts: ^2.1.0
   universal_platform: ^1.0.0+1
-  image_picker: ^0.8.3+2
-  extended_image: ^4.1.0
+  image_picker: ^0.8.4
+  extended_image: ^4.2.1
   image: ^3.0.2
   intl_phone_number_input: ^0.7.0+2
   debounce_throttle: ^2.0.0
