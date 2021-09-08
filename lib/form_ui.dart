@@ -43,10 +43,10 @@ Widget phoneNumberInput(
   var initialValue = initialNumber;
   if (initialValue == null)
     initialValue = countryCode != null
-          ? PhoneNumber(isoCode: countryCode)
-          : initialCountry != null
-              ? PhoneNumber(isoCode: initialCountry)
-              : null;
+        ? PhoneNumber(isoCode: countryCode)
+        : initialCountry != null
+            ? PhoneNumber(isoCode: initialCountry)
+            : null;
   return InternationalPhoneNumberInput(
       textFieldController: controller,
       initialValue: countryCode != null
