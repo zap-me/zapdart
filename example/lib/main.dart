@@ -2,15 +2,18 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:zapdart/colors.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
 import 'package:zapdart/libzap.dart';
+import 'package:zapdart/colors.dart';
+import 'package:zapdart/form_ui.dart';
 
 void main() => runApp(MaterialApp(home: Demo()));
 
 class Demo extends StatelessWidget {
+  final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     print(window.physicalSize);
@@ -41,6 +44,8 @@ class Demo extends StatelessWidget {
           subtitle: RoundedButton(() => alert(context, 'hello', 'world'),
               ZapWhite, ZapBlue, ZapBlueGradient, 'Button',
               holePunch: true)),
+      ListTile(
+        title: phoneNumberInput(_controller, (pn) => print(pn), countryCode: 'NZ', preferredCountries: ['New Zealand', 'Austrailia']))
     ]));
   }
 }

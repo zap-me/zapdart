@@ -13,6 +13,7 @@ import 'package:zapdart/widgets.dart';
 
 import 'addr_search.dart';
 import 'autocomplete_service.dart';
+import 'form_ui.dart';
 
 class AccountRegistration {
   final String firstName;
@@ -85,7 +86,8 @@ Widget accountImage(String? imgString, String? imgType,
     if (imgType == 'svg')
       return SvgPicture.string(imgString, width: size, height: size);
   }
-  return SvgPicture.asset('assets/user.svg', package: 'zapdart', width: size, height: size);
+  return SvgPicture.asset('assets/user.svg',
+      package: 'zapdart', width: size, height: size);
 }
 
 class AccountImageUpdate extends StatelessWidget {
@@ -376,68 +378,35 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
                                 return null;
                               })),
                       Visibility(
-                        visible: widget.showImage,
-                        child: AccountImageUpdate(
-                          _imgString,
-                          _imgType,
-                          (img, imgType) => setState(() {
-                                _imgString = img;
-                                _imgType = imgType;
-                              }))
-                      ),
+                          visible: widget.showImage,
+                          child: AccountImageUpdate(
+                              _imgString,
+                              _imgType,
+                              (img, imgType) => setState(() {
+                                    _imgString = img;
+                                    _imgType = imgType;
+                                  }))),
                       Visibility(
-                        visible: widget.showEmail,
-                        child: TextFormField(
-                        controller: _emailController,
-                        decoration: InputDecoration(labelText: 'Email'),
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value == null || value.isEmpty)
-                            return 'Please enter an email';
-                          if (!EmailValidator.validate(value))
-                            return 'Invalid email';
-                          return null;
-                        })
-                      ),
+                          visible: widget.showEmail,
+                          child: TextFormField(
+                              controller: _emailController,
+                              decoration: InputDecoration(labelText: 'Email'),
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (value) {
+                                if (value == null || value.isEmpty)
+                                  return 'Please enter an email';
+                                if (!EmailValidator.validate(value))
+                                  return 'Invalid email';
+                                return null;
+                              })),
                       Visibility(
                           visible: widget.showMobileNumber,
-                          child: InternationalPhoneNumberInput(
-                              textFieldController: _mobileNumberController,
-                              initialValue: _countryCode != null
-                                  ? PhoneNumber(isoCode: _countryCode)
-                                  : widget.initialMobileCountry != null
-                                      ? PhoneNumber(
-                                          isoCode: widget.initialMobileCountry)
-                                      : null,
-                              onInputChanged: (number) =>
-                                  _dialCode = number.dialCode,
-                              selectorConfig: SelectorConfig(
-                                  selectorType: PhoneInputSelectorType.DIALOG,
-                                  countryComparator: widget.preferredMobileCountries !=
-                                          null
-                                      ? (a, b) {
-                                          if (widget.preferredMobileCountries == null)
-                                            return 0;
-                                          if (widget.preferredMobileCountries!
-                                              .contains(a.name)) {
-                                            var aSlot =
-                                                widget.preferredMobileCountries!
-                                                    .indexOf(a.name!);
-                                            if (widget.preferredMobileCountries!
-                                                .contains(b.name)) {
-                                              var bSlot =
-                                                  widget.preferredMobileCountries!
-                                                      .indexOf(b.name!);
-                                              if (aSlot < bSlot)
-                                                return -1;
-                                              else
-                                                return 1;
-                                            } else
-                                              return -1;
-                                          }
-                                          return 0;
-                                        }
-                                      : null))),
+                          child: phoneNumberInput(_mobileNumberController,
+                              (number) => _dialCode = number.dialCode,
+                              countryCode: _countryCode,
+                              initialCountry: widget.initialMobileCountry,
+                              preferredCountries:
+                                  widget.preferredMobileCountries)),
                       Visibility(
                           visible: widget.showAddress,
                           child: TextFormField(
@@ -687,6 +656,86 @@ class AccountRequestApiKeyFormState extends State<AccountRequestApiKeyForm> {
                     ),
                     raisedButton(
                       child: Text("Cancel"),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                )))));
+  }
+}
+
+class AccountUpdateEmailForm extends StatefulWidget {
+  final String? instructions;
+
+  AccountUpdateEmailForm({this.instructions}) : super();
+
+  @override
+  AccountUpdateEmailFormState createState() {
+    return AccountUpdateEmailFormState();
+  }
+}
+
+class AccountUpdateEmailFormState extends State<AccountUpdateEmailForm> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailController2 = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  @protected
+  @mustCallSuper
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: PreferredSize(
+          child: Container(),
+          preferredSize: Size(0, 0),
+        ),
+        body: Form(
+            key: _formKey,
+            child: Container(
+                padding: EdgeInsets.all(20),
+                child: Center(
+                    child: Column(
+                  children: <Widget>[
+                    Text(widget.instructions == null
+                        ? 'Enter your new email address'
+                        : widget.instructions!),
+                    TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(labelText: 'New Email'),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty)
+                            return 'Please enter an email';
+                          if (!EmailValidator.validate(value))
+                            return 'Invalid email';
+                          return null;
+                        }),
+                    TextFormField(
+                        controller: _emailController2,
+                        decoration:
+                            InputDecoration(labelText: 'New Email Again'),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value != _emailController.text)
+                            return 'Email does not match';
+                          return null;
+                        }),
+                    raisedButton(
+                      child: Text('Ok'),
+                      onPressed: () {
+                        if (_formKey.currentState == null) return;
+                        if (_formKey.currentState!.validate()) {
+                          Navigator.of(context).pop(_emailController.text);
+                        }
+                      },
+                    ),
+                    raisedButton(
+                      child: Text('Cancel'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
