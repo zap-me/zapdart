@@ -98,7 +98,7 @@ class AccountImageUpdate extends StatelessWidget {
   AccountImageUpdate(this._imgString, this._imgType, this._imageUpdate)
       : super();
 
-  Future<String?> _imgDataEdited(BuildContext context, PickedFile file) async {
+  Future<String?> _imgDataEdited(BuildContext context, XFile file) async {
     final editorKey = GlobalKey<ExtendedImageEditorState>();
     final imageEditor = ExtendedImage.memory(
       await file.readAsBytes(),
@@ -188,7 +188,7 @@ class AccountImageUpdate extends StatelessWidget {
 
   void _imgFromCamera(BuildContext context) async {
     var file = await ImagePicker()
-        .getImage(source: ImageSource.camera, imageQuality: 50);
+        .pickImage(source: ImageSource.camera, imageQuality: 50);
     if (file == null) return;
     var imgString = await _imgDataEdited(context, file);
     _imageUpdate(imgString, 'raster');
@@ -196,7 +196,7 @@ class AccountImageUpdate extends StatelessWidget {
 
   void _imgFromGallery(BuildContext context) async {
     var file = await ImagePicker()
-        .getImage(source: ImageSource.gallery, imageQuality: 50);
+        .pickImage(source: ImageSource.gallery, imageQuality: 50);
     if (file == null) return;
     var imgString = await _imgDataEdited(context, file);
     _imageUpdate(imgString, 'raster');

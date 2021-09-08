@@ -159,7 +159,7 @@ String? parseRecipientOrWavesUri(bool testnet, String data) {
 }
 
 void showAlertDialog(BuildContext context, String msg,
-    {bool showCancel: false, Function()? onCancel: null}) {
+    {bool showCancel: false, Function()? onCancel}) {
   var alert = AlertDialog(
       content: Column(mainAxisSize: MainAxisSize.min, children: [
     Row(children: [

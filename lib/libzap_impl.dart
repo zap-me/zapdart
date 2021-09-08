@@ -225,71 +225,71 @@ class WavesPaymentRequestNative extends Struct {
 }
 */
 
-typedef lzap_version_native_t = Int32 Function();
-typedef lzap_version_t = int Function();
+typedef LzapVersionNative = Int32 Function();
+typedef LzapVersion = int Function();
 
-typedef lzap_node_get_t = Pointer<Utf8> Function();
-typedef lzap_node_set_native_t = Int8 Function(Pointer<Utf8> url);
-typedef lzap_node_set_t = int Function(Pointer<Utf8> url);
-typedef lzap_network_get_native_t = Int8 Function();
-typedef lzap_network_get_t = int Function();
-typedef lzap_network_set_native_t = Int8 Function(Int8 networkByte);
-typedef lzap_network_set_t = int Function(int networkByte);
-typedef lzap_asset_id_get_t = Pointer<Utf8> Function();
-typedef lzap_asset_id_set_native_t = Int8 Function(Pointer<Utf8> assetId);
-typedef lzap_asset_id_set_t = int Function(Pointer<Utf8> assetId);
+typedef LzapNodeGet = Pointer<Utf8> Function();
+typedef LzapNodeSetNative = Int8 Function(Pointer<Utf8> url);
+typedef LzapNodeSet = int Function(Pointer<Utf8> url);
+typedef LzapNetworkGetNative = Int8 Function();
+typedef LzapNetworkGet = int Function();
+typedef LzapNetworkSetNative = Int8 Function(Int8 networkByte);
+typedef LzapNetworkSet = int Function(int networkByte);
+typedef LzapAssetIdGet = Pointer<Utf8> Function();
+typedef LzapAssetIdSetNative = Int8 Function(Pointer<Utf8> assetId);
+typedef LzapAssetIdSet = int Function(Pointer<Utf8> assetId);
 
-typedef lzap_mnemonic_create_native_t = Int8 Function(
+typedef LzapMnemonicCreateNative = Int8 Function(
     Pointer<Utf8> output, Int32 size);
-typedef lzap_mnemonic_create_t = int Function(Pointer<Utf8> output, int size);
-typedef lzap_mnemonic_wordlist_t = Pointer<Pointer<Utf8>> Function();
+typedef LzapMnemonicCreate = int Function(Pointer<Utf8> output, int size);
+typedef LzapMnemonicWordlist = Pointer<Pointer<Utf8>> Function();
 
-typedef lzap_mnemonic_check_native_t = Int8 Function(Pointer<Utf8> mnemonic);
-typedef lzap_mnemonic_check_t = int Function(Pointer<Utf8> mnemonic);
+typedef LzapMnemonicCheckNative = Int8 Function(Pointer<Utf8> mnemonic);
+typedef LzapMnemonicCheck = int Function(Pointer<Utf8> mnemonic);
 
 //TODO: this function does not actually return anything, but dart:ffi does not seem to handle void functions yet
-typedef lzap_seed_address_native_t = Int32 Function(
+typedef LzapSeedAddressNative = Int32 Function(
     Pointer<Utf8> seed, Pointer<Utf8> output);
-typedef lzap_seed_address_t = int Function(
+typedef LzapSeedAddress = int Function(
     Pointer<Utf8> seed, Pointer<Utf8> output);
 
-typedef lzap_address_check_native_t = IntResult Function(Pointer<Utf8> address);
+typedef LzapAddressCheckNative = IntResult Function(Pointer<Utf8> address);
 //TODO: ns version
-typedef lzap_address_check_ns_native_t = Int8 Function(Pointer<Utf8> address);
-typedef lzap_address_check_ns_t = int Function(Pointer<Utf8> address);
+typedef LzapAddressCheckNsNative = Int8 Function(Pointer<Utf8> address);
+typedef LzapAddressCheckNs = int Function(Pointer<Utf8> address);
 
 //TODO: ns version
-typedef lzap_address_balance_ns_native_t = Int8 Function(
+typedef LzapAddressBalanceNsNative = Int8 Function(
     Pointer<Utf8> address, Pointer<Int64> balanceOut);
-typedef lzap_address_balance_ns_t = int Function(
+typedef LzapAddressBalanceNs = int Function(
     Pointer<Utf8> address, Pointer<Int64> balanceOut);
 
 //TODO: ns version of transaction list
-typedef lzap_address_transactions2_ns_native_t = Int8 Function(
+typedef LzapAddressTransactions2NsNative = Int8 Function(
     Pointer<Utf8> address,
     Pointer<Uint8> txs,
     Int32 count,
     Pointer<Utf8> after,
     Pointer<Int64> countOut);
-typedef lzap_address_transactions2_ns_t = int Function(
+typedef LzapAddressTransactions2Ns = int Function(
     Pointer<Utf8> address,
     Pointer<Uint8> txs,
     int count,
     Pointer<Utf8> after,
     Pointer<Int64> countOut);
 
-typedef lzap_transaction_fee_ns_native_t = Int8 Function(Pointer<Int64> feeOut);
-typedef lzap_transaction_Fee_ns_t = int Function(Pointer<Int64> feeOut);
+typedef LzapTransactionFeeNsNative = Int8 Function(Pointer<Int64> feeOut);
+typedef LzapTransactionFeeNs = int Function(Pointer<Int64> feeOut);
 
 //TODO: this function does not actually return anything, but dart:ffi does not seem to handle void functions yet
-typedef lzap_transaction_create_ns_native_t = Int32 Function(
+typedef LzapTransactionCreateNsNative = Int32 Function(
     Pointer<Utf8> seed,
     Pointer<Utf8> recipient,
     Int64 amount,
     Int64 fee,
     Pointer<Utf8> attachment,
     Pointer<Uint8> spendTxOut);
-typedef lzap_transaction_create_ns_t = int Function(
+typedef LzapTransactionCreateNs = int Function(
     Pointer<Utf8> seed,
     Pointer<Utf8> recipient,
     int amount,
@@ -298,15 +298,15 @@ typedef lzap_transaction_create_ns_t = int Function(
     Pointer<Uint8> spendTxOut);
 
 //TODO: ns version of transaction broadcast!!!
-typedef lzap_transaction_broadcast_ns_native_t = Int32 Function(
+typedef LzapTransactionBroadcastNsNative = Int32 Function(
     Pointer<Uint8> spendTx, Pointer<Uint8> broadcastTxOut);
-typedef lzap_transaction_broadcast_ns_t = int Function(
+typedef LzapTransactionBroadcastNs = int Function(
     Pointer<Uint8> spendTx, Pointer<Uint8> broadcastTxOut);
 
 //TODO: ns version of transaction broadcast!!!
-typedef lzap_message_sign_ns_native_t = Int32 Function(Pointer<Utf8> seed,
+typedef LzapMessageSignNsNative = Int32 Function(Pointer<Utf8> seed,
     Pointer<Uint8> message, Int32 messageSize, Pointer<Uint8> signatureOut);
-typedef lzap_message_sign_ns_t = int Function(Pointer<Utf8> seed,
+typedef LzapMessageSignNs = int Function(Pointer<Utf8> seed,
     Pointer<Uint8> message, int messageSize, Pointer<Uint8> signatureOut);
 
 //
@@ -396,91 +396,88 @@ class LibZapImpl implements LibZap {
   LibZapImpl() {
     libzap = dlopenPlatformSpecific("zap");
     lzapVersion = libzap
-        .lookup<NativeFunction<lzap_version_native_t>>("lzap_version")
+        .lookup<NativeFunction<LzapVersionNative>>("lzap_version")
         .asFunction();
     lzapNodeGet = libzap
-        .lookup<NativeFunction<lzap_node_get_t>>("lzap_node_get")
+        .lookup<NativeFunction<LzapNodeGet>>("lzap_node_get")
         .asFunction();
     lzapNodeSet = libzap
-        .lookup<NativeFunction<lzap_node_set_native_t>>("lzap_node_set")
+        .lookup<NativeFunction<LzapNodeSetNative>>("lzap_node_set")
         .asFunction();
     lzapNetworkGet = libzap
-        .lookup<NativeFunction<lzap_network_get_native_t>>("lzap_network_get")
+        .lookup<NativeFunction<LzapNetworkGetNative>>("lzap_network_get")
         .asFunction();
     lzapNetworkSet = libzap
-        .lookup<NativeFunction<lzap_network_set_native_t>>("lzap_network_set")
+        .lookup<NativeFunction<LzapNetworkSetNative>>("lzap_network_set")
         .asFunction();
     lzapAssetIdGet = libzap
-        .lookup<NativeFunction<lzap_asset_id_get_t>>("lzap_asset_id_get")
+        .lookup<NativeFunction<LzapAssetIdGet>>("lzap_asset_id_get")
         .asFunction();
     lzapAssetIdSet = libzap
-        .lookup<NativeFunction<lzap_asset_id_set_native_t>>("lzap_asset_id_set")
+        .lookup<NativeFunction<LzapAssetIdSetNative>>("lzap_asset_id_set")
         .asFunction();
     lzapMnemonicCreate = libzap
-        .lookup<NativeFunction<lzap_mnemonic_create_native_t>>(
+        .lookup<NativeFunction<LzapMnemonicCreateNative>>(
             "lzap_mnemonic_create")
         .asFunction();
     lzapMnemonicCheck = libzap
-        .lookup<NativeFunction<lzap_mnemonic_check_native_t>>(
-            "lzap_mnemonic_check")
+        .lookup<NativeFunction<LzapMnemonicCheckNative>>("lzap_mnemonic_check")
         .asFunction();
     lzapMnemonicWordlist = libzap
-        .lookup<NativeFunction<lzap_mnemonic_wordlist_t>>(
-            "lzap_mnemonic_wordlist")
+        .lookup<NativeFunction<LzapMnemonicWordlist>>("lzap_mnemonic_wordlist")
         .asFunction();
 
     lzapSeedAddress = libzap
-        .lookup<NativeFunction<lzap_seed_address_native_t>>("lzap_seed_address")
+        .lookup<NativeFunction<LzapSeedAddressNative>>("lzap_seed_address")
         .asFunction();
     lzapAddressCheck = libzap
-        .lookup<NativeFunction<lzap_address_check_ns_native_t>>(
+        .lookup<NativeFunction<LzapAddressCheckNsNative>>(
             "lzap_address_check_ns")
         .asFunction();
     lzapAddressBalance = libzap
-        .lookup<NativeFunction<lzap_address_balance_ns_native_t>>(
+        .lookup<NativeFunction<LzapAddressBalanceNsNative>>(
             "lzap_address_balance_ns")
         .asFunction();
     lzapAddressTransactions = libzap
-        .lookup<NativeFunction<lzap_address_transactions2_ns_native_t>>(
+        .lookup<NativeFunction<LzapAddressTransactions2NsNative>>(
             "lzap_address_transactions2_ns")
         .asFunction();
     lzapTransactionFee = libzap
-        .lookup<NativeFunction<lzap_transaction_fee_ns_native_t>>(
+        .lookup<NativeFunction<LzapTransactionFeeNsNative>>(
             "lzap_transaction_fee_ns")
         .asFunction();
     lzapTransactionCreate = libzap
-        .lookup<NativeFunction<lzap_transaction_create_ns_native_t>>(
+        .lookup<NativeFunction<LzapTransactionCreateNsNative>>(
             "lzap_transaction_create_ns")
         .asFunction();
     lzapTransactionBroadcast = libzap
-        .lookup<NativeFunction<lzap_transaction_broadcast_ns_native_t>>(
+        .lookup<NativeFunction<LzapTransactionBroadcastNsNative>>(
             "lzap_transaction_broadcast_ns")
         .asFunction();
     lzapMessageSign = libzap
-        .lookup<NativeFunction<lzap_message_sign_ns_native_t>>(
-            "lzap_message_sign_ns")
+        .lookup<NativeFunction<LzapMessageSignNsNative>>("lzap_message_sign_ns")
         .asFunction();
   }
 
   late DynamicLibrary libzap;
-  late lzap_version_t lzapVersion;
-  late lzap_node_get_t lzapNodeGet;
-  late lzap_node_set_t lzapNodeSet;
-  late lzap_network_get_t lzapNetworkGet;
-  late lzap_network_set_t lzapNetworkSet;
-  late lzap_asset_id_get_t lzapAssetIdGet;
-  late lzap_asset_id_set_t lzapAssetIdSet;
-  late lzap_mnemonic_create_t lzapMnemonicCreate;
-  late lzap_mnemonic_check_t lzapMnemonicCheck;
-  late lzap_mnemonic_wordlist_t lzapMnemonicWordlist;
-  late lzap_seed_address_t lzapSeedAddress;
-  late lzap_address_check_ns_t lzapAddressCheck;
-  late lzap_address_balance_ns_t lzapAddressBalance;
-  late lzap_address_transactions2_ns_t lzapAddressTransactions;
-  late lzap_transaction_Fee_ns_t lzapTransactionFee;
-  late lzap_transaction_create_ns_t lzapTransactionCreate;
-  late lzap_transaction_broadcast_ns_t lzapTransactionBroadcast;
-  late lzap_message_sign_ns_t lzapMessageSign;
+  late LzapVersion lzapVersion;
+  late LzapNodeGet lzapNodeGet;
+  late LzapNodeSet lzapNodeSet;
+  late LzapNetworkGet lzapNetworkGet;
+  late LzapNetworkSet lzapNetworkSet;
+  late LzapAssetIdGet lzapAssetIdGet;
+  late LzapAssetIdSet lzapAssetIdSet;
+  late LzapMnemonicCreate lzapMnemonicCreate;
+  late LzapMnemonicCheck lzapMnemonicCheck;
+  late LzapMnemonicWordlist lzapMnemonicWordlist;
+  late LzapSeedAddress lzapSeedAddress;
+  late LzapAddressCheckNs lzapAddressCheck;
+  late LzapAddressBalanceNs lzapAddressBalance;
+  late LzapAddressTransactions2Ns lzapAddressTransactions;
+  late LzapTransactionFeeNs lzapTransactionFee;
+  late LzapTransactionCreateNs lzapTransactionCreate;
+  late LzapTransactionBroadcastNs lzapTransactionBroadcast;
+  late LzapMessageSignNs lzapMessageSign;
 
   //
   // native libzap wrapper functions
@@ -527,7 +524,7 @@ class LibZapImpl implements LibZap {
 
   void assetIdSet(String value) {
     var valueC = value.toNativeUtf8();
-    lzapAssetIdSet(valueC) != 0;
+    lzapAssetIdSet(valueC);
     calloc.free(valueC);
   }
 
