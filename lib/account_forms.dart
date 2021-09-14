@@ -41,8 +41,9 @@ class AccountRegistration {
 class AccountLogin {
   final String email;
   final String password;
+  final String tfCode;
 
-  AccountLogin(this.email, this.password);
+  AccountLogin(this.email, this.password, this.tfCode);
 }
 
 class AccountRequestApiKey {
@@ -499,8 +500,9 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
 class AccountLoginForm extends StatefulWidget {
   final AccountLogin? login;
   final String? instructions;
+  final bool showTwoFactorCode;
 
-  AccountLoginForm(this.login, {this.instructions}) : super();
+  AccountLoginForm(this.login, {this.instructions, this.showTwoFactorCode = false}) : super();
 
   @override
   AccountLoginFormState createState() {
@@ -511,6 +513,7 @@ class AccountLoginForm extends StatefulWidget {
 class AccountLoginFormState extends State<AccountLoginForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _tfCodeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @protected
@@ -561,13 +564,21 @@ class AccountLoginFormState extends State<AccountLoginForm> {
                             return 'Please enter a password';
                           return null;
                         }),
+                    Visibility(
+                      visible: widget.showTwoFactorCode,
+                      child: TextFormField(
+                          controller: _tfCodeController,
+                          obscureText: true,
+                          decoration: InputDecoration(labelText: 'Two Factor Code')
+                      )
+                    ),
                     raisedButton(
                       child: Text("Ok"),
                       onPressed: () {
                         if (_formKey.currentState == null) return;
                         if (_formKey.currentState!.validate()) {
                           var accountLogin = AccountLogin(
-                              _emailController.text, _passwordController.text);
+                              _emailController.text, _passwordController.text, _tfCodeController.text);
                           Navigator.of(context).pop(accountLogin);
                         }
                       },
