@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:image/image.dart' as img;
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:intl_phone_number_input/src/utils/phone_number/phone_number_util.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:zapdart/widgets.dart';
@@ -240,9 +241,11 @@ class AccountRegisterForm extends StatefulWidget {
   final bool showImage;
   final bool showEmail;
   final bool showMobileNumber;
+  final bool requireMobileNumber;
   final String? initialMobileCountry;
   final List<String>? preferredMobileCountries;
   final bool showAddress;
+  final bool requireAddress;
   final String? googlePlaceApiKey;
   final String? locationIqApiKey;
   final bool showCurrentPassword;
@@ -254,9 +257,11 @@ class AccountRegisterForm extends StatefulWidget {
       this.showImage: true,
       this.showEmail: true,
       this.showMobileNumber: false,
+      this.requireMobileNumber: false,
       this.initialMobileCountry,
       this.preferredMobileCountries,
       this.showAddress: false,
+      this.requireAddress: false,
       this.googlePlaceApiKey,
       this.locationIqApiKey,
       this.showCurrentPassword: false,
@@ -283,6 +288,8 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
   final _formKey = GlobalKey<FormState>();
 
   String? _dialCode;
+  String? _isoCode;
+  bool _valid = false;
   String? _countryCode;
   String? _imgString;
   String? _imgType;
@@ -335,6 +342,22 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
       MaterialPageRoute(builder: (context) => AddressForm()),
     );
     if (place != null) _addressController.text = place.toString();
+  }
+
+  Future<bool> isValidPhoneNumber(
+      String phoneNumber, String? isoCode) async {
+    if (phoneNumber.isNotEmpty && isoCode != null) {
+      try {
+        bool? isValidPhoneNumber = await PhoneNumberUtil.isValidNumber(
+            phoneNumber: phoneNumber, isoCode: isoCode);
+        if (isValidPhoneNumber == null)
+          return false;
+        return isValidPhoneNumber;
+      } on Exception {
+        return false;
+      }
+    }
+    return false;
   }
 
   @override
@@ -403,11 +426,28 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
                       Visibility(
                           visible: widget.showMobileNumber,
                           child: phoneNumberInput(_mobileNumberController,
-                              (number) => _dialCode = number.dialCode,
+                              (number) {
+                                _dialCode = number.dialCode;
+                                _isoCode = number.isoCode;
+                              },
+                              (valid) {
+                                if (valid != null)
+                                  _valid = valid;
+                              },
                               countryCode: _countryCode,
                               initialCountry: widget.initialMobileCountry,
                               preferredCountries:
-                                  widget.preferredMobileCountries)),
+                                  widget.preferredMobileCountries,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  if (widget.requireMobileNumber)
+                                    return 'Invalid phone number';
+                                  return null;
+                                }
+                                if (_isoCode == null || !_valid)
+                                  return 'Invalid phone number';
+                                return null;
+                              })),
                       Visibility(
                           visible: widget.showAddress,
                           child: TextFormField(

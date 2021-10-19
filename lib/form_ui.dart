@@ -34,7 +34,7 @@ class CheckboxFormField extends FormField<bool> {
 }
 
 Widget phoneNumberInput(
-    TextEditingController controller, ValueChanged<PhoneNumber> onInputChanged,
+    TextEditingController controller, ValueChanged<PhoneNumber> onInputChanged, void Function(bool?) onInputValidated,
     {String? Function(String?)? validator,
     PhoneNumber? initialNumber,
     String? countryCode,
@@ -55,6 +55,7 @@ Widget phoneNumberInput(
               ? PhoneNumber(isoCode: initialCountry)
               : null,
       onInputChanged: onInputChanged,
+      onInputValidated: onInputValidated,
       validator: validator,
       selectorConfig: SelectorConfig(
           selectorType: PhoneInputSelectorType.DIALOG,

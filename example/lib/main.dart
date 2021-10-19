@@ -45,7 +45,7 @@ class Demo extends StatelessWidget {
               ZapWhite, ZapBlue, ZapBlueGradient, 'Button',
               holePunch: true)),
       ListTile(
-        title: phoneNumberInput(_controller, (pn) => print(pn), countryCode: 'NZ', preferredCountries: ['New Zealand', 'Austrailia']))
+        title: phoneNumberInput(_controller, (pn) => print(pn), (valid) => print(valid), countryCode: 'NZ', preferredCountries: ['New Zealand', 'Austrailia']))
     ]));
   }
 }
