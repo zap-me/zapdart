@@ -6,13 +6,27 @@ typedef TextTheme TextThemer([TextTheme textTheme]);
 
 Brightness ZapBrightness = Brightness.light;
 
-Color ZapWhite = Colors.white;
-Color ZapGrey = Color(0xFFF8F6F1);
-Color ZapBlue = Color(0xFF3765CB);
-Gradient? ZapBlueGradient = LinearGradient(
+Color ZapPrimary = Color(0xffeeeeee);
+Color ZapPrimaryDark = Color(0xffbcbcbc);
+
+Color ZapSecondary = Color(0xff5c6bc0);
+Gradient? ZapSecondaryGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [ZapBlue, Color(0xFF6090E0)]);
+    colors: [ZapSecondary, Color(0xFF6090E0)]);
+Color ZapSecondaryDark = Color(0xff26418f);
+
+Color ZapSurface = Colors.white;
+Color ZapBackground = Colors.white;
+Color ZapError = Color(0xffb00020);
+
+Color ZapOnPrimary = Colors.black;
+Color ZapOnSecondary = Colors.white;
+
+Color ZapOnSurface = Colors.black;
+Color ZapOnBackground = Colors.black;
+Color ZapOnError = Colors.white;
+
 Color ZapYellow = Color(0xFFFFBB00);
 Gradient? ZapYellowGradient = LinearGradient(
     begin: Alignment.topLeft,
@@ -37,10 +51,21 @@ TextThemer ZapTextThemer = GoogleFonts.oxygenTextTheme;
 
 void overrideTheme(
     {Brightness? zapBrightness,
-    Color? zapWhite,
-    Color? zapGrey,
-    Color? zapBlue,
-    Gradient? zapBlueGradient,
+    Color? zapPrimary,
+    Color? zapPrimaryDark,
+    Color? zapSecondary,
+    Color? zapSecondaryDark,
+    Gradient? zapSecondaryGradient,
+
+    Color? zapSurface,
+    Color? zapBackground,
+    Color? zapError,
+    Color? zapOnPrimary,
+    Color? zapOnSecondary,
+    Color? zapOnError,
+    Color? zapOnSurface,
+    Color? zapOnBackground,
+
     Color? zapYellow,
     Gradient? zapYellowGradient,
     Color? zapGreen,
@@ -58,10 +83,20 @@ void overrideTheme(
   // brightness
   if (zapBrightness != null) ZapBrightness = zapBrightness;
   // colors
-  if (zapWhite != null) ZapWhite = zapWhite;
-  if (zapGrey != null) ZapGrey = zapGrey;
-  if (zapBlue != null) ZapBlue = zapBlue;
-  if (zapBlueGradient != null) ZapBlueGradient = zapBlueGradient;
+  if (zapPrimary != null) ZapPrimary = zapPrimary;
+  if (zapPrimaryDark != null) ZapPrimaryDark = zapPrimaryDark;
+  if (zapSecondary != null) ZapSecondary = zapSecondary;
+  if (zapSecondaryDark != null) ZapSecondaryDark = zapSecondaryDark;
+
+  if (zapSurface != null) ZapSurface = zapSurface;
+  if (zapBackground != null) ZapBackground = zapBackground;
+  if (zapError != null) ZapError = zapError;
+  if (zapOnPrimary != null) ZapOnPrimary = zapOnPrimary;
+  if (zapOnSecondary != null) ZapOnSecondary = zapOnSecondary;
+  if (zapOnError != null) ZapOnError = zapOnError;
+  if (zapOnSurface != null) ZapOnSurface = zapOnSurface;
+  if (zapOnBackground != null) ZapOnBackground = zapOnBackground;
+
   if (zapYellow != null) ZapYellow = zapYellow;
   if (zapYellowGradient != null) ZapYellowGradient = zapYellowGradient;
   if (zapGreen != null) ZapGreen = zapGreen;

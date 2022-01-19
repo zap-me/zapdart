@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:image/image.dart' as img;

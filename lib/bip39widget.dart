@@ -71,7 +71,7 @@ class Bip39Words extends StatelessWidget {
                             onPressed: () =>
                                 onWordPressed(rowIndex * rowSize + index),
                             primary:
-                                validBip39 ? ZapGreen.withAlpha(198) : ZapWhite,
+                                validBip39 ? ZapGreen.withAlpha(198) : ZapPrimary,
                             padding: EdgeInsets.all(2)));
                   }).toList());
             }).toList()));

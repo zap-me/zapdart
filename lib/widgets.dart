@@ -10,7 +10,7 @@ enum MessageCategory {
 
 Widget backButton(BuildContext context,
     {Color? color, void Function()? onPressed}) {
-  if (color == null) color = ZapWhite;
+  if (color == null) color = ZapPrimary;
   return IconButton(
       icon: Icon(Icons.arrow_back_ios, color: color),
       onPressed: onPressed != null
@@ -99,13 +99,13 @@ void flushbarMsg(BuildContext context, String msg,
       break;
   }
   Flushbar(
-    messageText: Text(msg, style: TextStyle(color: ZapBlue)),
+    messageText: Text(msg, style: TextStyle(color: ZapSecondary)),
     icon: Icon(icon,
         size: 28.0,
-        color: category == MessageCategory.Info ? ZapBlue : ZapWarning),
+        color: category == MessageCategory.Info ? ZapSecondary : ZapWarning),
     duration: Duration(seconds: seconds),
-    leftBarIndicatorColor: ZapBlue,
-    backgroundColor: ZapWhite,
+    leftBarIndicatorColor: ZapSecondary,
+    backgroundColor: ZapPrimary,
   )..show(context);
 }
 
@@ -216,10 +216,10 @@ class SquareButton extends StatelessWidget {
                   color: color),
               child: Container(
                   padding: EdgeInsets.all(30),
-                  child: Icon(icon, color: ZapWhite))),
+                  child: Icon(icon, color: ZapPrimary))),
         ),
         SizedBox.fromSize(size: Size(1, 12)),
-        Text(title, style: TextStyle(fontSize: 10, color: ZapBlue))
+        Text(title, style: TextStyle(fontSize: 10, color: ZapSecondary))
       ],
     );
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 import 'colors.dart';
@@ -52,7 +51,7 @@ class _PinEntryState extends State<PinEntryScreen> {
                     focusNode: _focusNode,
                     hideCharacter: true,
                     highlight: true,
-                    highlightColor: ZapBlue,
+                    highlightColor: ZapSecondary,
                     defaultBorderColor: ZapBlack,
                     hasTextBorderColor: ZapGreen,
                     maxLength: _pinLength,
@@ -91,7 +90,7 @@ class _PinEntryState extends State<PinEntryScreen> {
                     pinTextAnimatedSwitcherDuration:
                         Duration(milliseconds: _animDelay),
                     highlightAnimationBeginColor: ZapBlack,
-                    highlightAnimationEndColor: ZapWhite,
+                    highlightAnimationEndColor: ZapPrimary,
                     keyboardType: TextInputType.number,
                     pinBoxWidth: 50,
                     pinBoxHeight: 50,
@@ -111,7 +110,7 @@ class _PinEntryState extends State<PinEntryScreen> {
                     children: <Widget>[
                       MaterialButton(
                         color: ZapYellow,
-                        textColor: ZapWhite,
+                        textColor: ZapPrimary,
                         child: Text("Clear"),
                         onPressed: () {
                           _controller.clear();
