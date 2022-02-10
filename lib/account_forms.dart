@@ -7,6 +7,7 @@ import 'package:image/image.dart' as img;
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:intl_phone_number_input/src/utils/phone_number/phone_number_util.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:zxcvbn/zxcvbn.dart';
 
 import 'package:zapdart/widgets.dart';
 
@@ -488,8 +489,10 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
                               decoration:
                                   InputDecoration(labelText: 'New Password'),
                               validator: (value) {
-                                if (value == null || value.isEmpty)
-                                  return 'Please enter a new password';
+				final zxcvbn = Zxcvbn();
+				final zxResult = zxcvbn.evaluate(value);
+                                if (value == null || value.isEmpty || zxResult.score != 4)
+                                  return 'Please enter a stronger new password';
                                 return null;
                               })),
                       Visibility(
