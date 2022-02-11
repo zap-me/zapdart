@@ -490,7 +490,7 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
                                   InputDecoration(labelText: 'New Password'),
                               validator: (value) {
 				final zxcvbn = Zxcvbn();
-				final zxResult = zxcvbn.evaluate(value);
+				final zxResult = zxcvbn.evaluate(value ?? '');
                                 if (value == null || value.isEmpty || zxResult.score != 4)
                                   return 'Please enter a stronger new password';
                                 return null;
