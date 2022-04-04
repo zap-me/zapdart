@@ -415,6 +415,7 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
                               decoration: InputDecoration(labelText: 'Email'),
                               keyboardType: TextInputType.emailAddress,
                               validator: (value) {
+                                value = value?.trim();
                                 if (value == null || value.isEmpty)
                                   return 'Please enter an email';
                                 if (!EmailValidator.validate(value))
@@ -514,7 +515,7 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
                             var accountReg = AccountRegistration(
                                 _firstNameController.text,
                                 _lastNameController.text,
-                                _emailController.text,
+                                _emailController.text.trim(),
                                 '$_dialCode ${_mobileNumberController.text}',
                                 _addressController.text,
                                 _currentPasswordController.text,
@@ -587,6 +588,7 @@ class AccountLoginFormState extends State<AccountLoginForm> {
                         decoration: InputDecoration(labelText: 'Email'),
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
+                          value = value?.trim();
                           if (value == null || value.isEmpty)
                             return 'Please enter an email';
                           if (!EmailValidator.validate(value))
@@ -616,7 +618,7 @@ class AccountLoginFormState extends State<AccountLoginForm> {
                         if (_formKey.currentState == null) return;
                         if (_formKey.currentState!.validate()) {
                           var accountLogin = AccountLogin(
-                              _emailController.text, _passwordController.text, _tfCodeController.text);
+                              _emailController.text.trim(), _passwordController.text, _tfCodeController.text);
                           Navigator.of(context).pop(accountLogin);
                         }
                       },
@@ -678,6 +680,7 @@ class AccountRequestApiKeyFormState extends State<AccountRequestApiKeyForm> {
                         decoration: InputDecoration(labelText: 'Email'),
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
+                          value = value?.trim();
                           if (value == null || value.isEmpty)
                             return 'Please enter an email';
                           if (!EmailValidator.validate(value))
@@ -697,7 +700,7 @@ class AccountRequestApiKeyFormState extends State<AccountRequestApiKeyForm> {
                       onPressed: () {
                         if (_formKey.currentState == null) return;
                         if (_formKey.currentState!.validate()) {
-                          var req = AccountRequestApiKey(_emailController.text,
+                          var req = AccountRequestApiKey(_emailController.text.trim(),
                               _deviceNameController.text);
                           Navigator.of(context).pop(req);
                         }
@@ -770,6 +773,7 @@ class AccountUpdateEmailFormState extends State<AccountUpdateEmailForm> {
                             InputDecoration(labelText: 'New Email Again'),
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
+                          value = value?.trim();
                           if (value != _emailController.text)
                             return 'Email does not match';
                           return null;
@@ -779,7 +783,7 @@ class AccountUpdateEmailFormState extends State<AccountUpdateEmailForm> {
                       onPressed: () {
                         if (_formKey.currentState == null) return;
                         if (_formKey.currentState!.validate()) {
-                          Navigator.of(context).pop(_emailController.text);
+                          Navigator.of(context).pop(_emailController.text.trim());
                         }
                       },
                     ),
