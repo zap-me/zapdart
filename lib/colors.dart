@@ -25,6 +25,7 @@ Color ZapOnSecondary = Colors.white;
 
 Color ZapOnSurface = Colors.black;
 Color ZapOnBackground = Colors.black;
+Color ZapOnBackgroundLight = Colors.black54;
 Color ZapOnError = Colors.white;
 
 Color ZapYellow = Color(0xFFFFBB00);
@@ -65,6 +66,7 @@ void overrideTheme(
     Color? zapOnError,
     Color? zapOnSurface,
     Color? zapOnBackground,
+    Color? zapOnBackgroundLight,
 
     Color? zapYellow,
     Gradient? zapYellowGradient,
@@ -87,6 +89,7 @@ void overrideTheme(
   if (zapPrimaryDark != null) ZapPrimaryDark = zapPrimaryDark;
   if (zapSecondary != null) ZapSecondary = zapSecondary;
   if (zapSecondaryDark != null) ZapSecondaryDark = zapSecondaryDark;
+  if (zapSecondaryGradient != null) ZapSecondaryGradient = zapSecondaryGradient;
 
   if (zapSurface != null) ZapSurface = zapSurface;
   if (zapBackground != null) ZapBackground = zapBackground;
@@ -96,6 +99,7 @@ void overrideTheme(
   if (zapOnError != null) ZapOnError = zapOnError;
   if (zapOnSurface != null) ZapOnSurface = zapOnSurface;
   if (zapOnBackground != null) ZapOnBackground = zapOnBackground;
+  if (zapOnBackgroundLight != null) ZapOnBackgroundLight = zapOnBackgroundLight;
 
   if (zapYellow != null) ZapYellow = zapYellow;
   if (zapYellowGradient != null) ZapYellowGradient = zapYellowGradient;
