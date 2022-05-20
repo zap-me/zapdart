@@ -507,6 +507,7 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
                                   return 'Password does not match';
                                 return null;
                               })),
+                      SizedBox(height: 15),
                       raisedButton(
                         child: Text("Ok"),
                         onPressed: () async {
@@ -526,6 +527,7 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
                           }
                         },
                       ),
+                      SizedBox(height: 15),
                       raisedButton(
                         child: Text("Cancel"),
                         onPressed: () {
@@ -612,6 +614,7 @@ class AccountLoginFormState extends State<AccountLoginForm> {
                           decoration: InputDecoration(labelText: 'Two Factor Code')
                       )
                     ),
+                    SizedBox(height: 15),
                     raisedButton(
                       child: Text("Ok"),
                       onPressed: () {
@@ -623,6 +626,7 @@ class AccountLoginFormState extends State<AccountLoginForm> {
                         }
                       },
                     ),
+                    SizedBox(height: 15),
                     raisedButton(
                       child: Text("Cancel"),
                       onPressed: () {
@@ -695,6 +699,7 @@ class AccountRequestApiKeyFormState extends State<AccountRequestApiKeyForm> {
                             return 'Please enter a device name';
                           return null;
                         }),
+                    SizedBox(height: 15),
                     raisedButton(
                       child: Text("Ok"),
                       onPressed: () {
@@ -706,6 +711,7 @@ class AccountRequestApiKeyFormState extends State<AccountRequestApiKeyForm> {
                         }
                       },
                     ),
+                    SizedBox(height: 15),
                     raisedButton(
                       child: Text("Cancel"),
                       onPressed: () {
@@ -778,6 +784,7 @@ class AccountUpdateEmailFormState extends State<AccountUpdateEmailForm> {
                             return 'Email does not match';
                           return null;
                         }),
+                    SizedBox(height: 15),
                     raisedButton(
                       child: Text('Ok'),
                       onPressed: () {
@@ -787,6 +794,7 @@ class AccountUpdateEmailFormState extends State<AccountUpdateEmailForm> {
                         }
                       },
                     ),
+                    SizedBox(height: 15),
                     raisedButton(
                       child: Text('Cancel'),
                       onPressed: () {

@@ -10,7 +10,7 @@ enum MessageCategory {
 
 Widget backButton(BuildContext context,
     {Color? color, void Function()? onPressed}) {
-  if (color == null) color = ZapPrimary;
+  color ??= ZapPrimary;
   return IconButton(
       icon: Icon(Icons.arrow_back_ios, color: color),
       onPressed: onPressed != null
@@ -19,12 +19,13 @@ Widget backButton(BuildContext context,
 }
 
 ButtonStyle raisedButtonStyle(
-    {Color? primary, EdgeInsetsGeometry? padding, Size? minSize}) {
-  primary ??= Colors.grey[300];
+    {Color? primary, Color? textColor, EdgeInsetsGeometry? padding, Size? minSize}) {
+  primary ??= ZapPrimary;
+  textColor ??= ZapOnPrimary;
   padding ??= EdgeInsets.symmetric(horizontal: 16);
   minSize ??= Size(88, 36);
   return ElevatedButton.styleFrom(
-    onPrimary: Colors.black87,
+    onPrimary: textColor,
     primary: primary,
     minimumSize: minSize,
     padding: padding,
@@ -38,13 +39,14 @@ Widget raisedButton(
     {required void Function()? onPressed,
     required Widget? child,
     Color? primary,
+    Color? textColor,
     EdgeInsetsGeometry? padding,
     Size? minSize}) {
   return ElevatedButton(
       onPressed: onPressed,
       child: child,
       style: raisedButtonStyle(
-          primary: primary, padding: padding, minSize: minSize));
+          primary: primary, textColor: textColor, padding: padding, minSize: minSize));
 }
 
 Widget raisedButtonIcon(
@@ -52,6 +54,7 @@ Widget raisedButtonIcon(
     required Widget icon,
     required Widget label,
     Color? primary,
+    Color? textColor,
     EdgeInsetsGeometry? padding,
     Size? minSize}) {
   return ElevatedButton.icon(
@@ -59,7 +62,7 @@ Widget raisedButtonIcon(
       icon: icon,
       label: label,
       style: raisedButtonStyle(
-          primary: primary, padding: padding, minSize: minSize));
+          primary: primary, textColor: textColor, padding: padding, minSize: minSize));
 }
 
 ButtonStyle flatButtonStyle() {
