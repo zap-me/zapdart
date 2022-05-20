@@ -195,15 +195,19 @@ class RoundedButton extends StatelessWidget {
 }
 
 class SquareButton extends StatelessWidget {
-  SquareButton(this.onPressed, this.icon, this.color, this.title) : super();
+  SquareButton(this.onPressed, this.icon, this.color, this.title, {this.textColor, this.textOutside=true, this.borderSize=5.0}) : super();
 
   final VoidCallback onPressed;
   final IconData icon;
   final Color color;
   final String title;
+  final Color? textColor;
+  final bool textOutside;
+  final double borderSize;
 
   @override
   Widget build(BuildContext context) {
+    var text = Column(children: [SizedBox.fromSize(size: Size(1, 12)), Text(title, style: TextStyle(fontSize: 10, color: textColor != null ? textColor : ZapOnSecondary))]);
     return Column(
       children: <Widget>[
         InkWell(
@@ -212,14 +216,19 @@ class SquareButton extends StatelessWidget {
               decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(5),
-                  border: Border.all(width: 5.0, color: color),
+                  border: Border.all(width: borderSize, color: color),
                   color: color),
               child: Container(
-                  padding: EdgeInsets.all(30),
-                  child: Icon(icon, color: ZapPrimary))),
+                  width: 150,
+                  height: 150,
+                  alignment: Alignment.center,
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    Icon(icon, color: textColor != null ? textColor : ZapOnSecondary),
+                    textOutside ? SizedBox() : text
+                  ]))
+            ),
         ),
-        SizedBox.fromSize(size: Size(1, 12)),
-        Text(title, style: TextStyle(fontSize: 10, color: ZapSecondary))
+        textOutside ? text : SizedBox()
       ],
     );
   }
