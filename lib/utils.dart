@@ -224,6 +224,7 @@ Future<String?> askString(BuildContext context, String title, String? value) {
               return null;
             },
           ),
+          SizedBox(height: 15),
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -299,6 +300,7 @@ Future<String?> askSetMnemonicPassword(BuildContext context) async {
               return null;
             },
           ),
+          SizedBox(height: 15),
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -358,6 +360,7 @@ Future<String?> askMnemonicPassword(BuildContext context) async {
               return null;
             },
           ),
+          SizedBox(height: 15),
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
