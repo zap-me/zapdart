@@ -16,10 +16,10 @@ class CheckboxFormField extends FormField<bool> {
                 dense: state.hasError,
                 title: title,
                 value: state.value,
-                onChanged: (value) {
+                onChanged: onChanged != null ? (value) {
                   state.didChange(value);
                   if (onChanged != null) onChanged(value);
-                },
+                } : null,
                 subtitle: state.hasError
                     ? Builder(
                         builder: (BuildContext context) => Text(
