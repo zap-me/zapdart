@@ -8,6 +8,10 @@ Brightness ZapBrightness = Brightness.light;
 
 Color ZapPrimary = Color(0xffeeeeee);
 Color ZapPrimaryDark = Color(0xffbcbcbc);
+Gradient? ZapPrimaryGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [ZapPrimary, ZapPrimaryDark]);
 
 Color ZapSecondary = Color(0xff5c6bc0);
 Gradient? ZapSecondaryGradient = LinearGradient(
@@ -54,6 +58,7 @@ void overrideTheme(
     {Brightness? zapBrightness,
     Color? zapPrimary,
     Color? zapPrimaryDark,
+    Gradient? zapPrimaryGradient,
     Color? zapSecondary,
     Color? zapSecondaryDark,
     Gradient? zapSecondaryGradient,
@@ -87,6 +92,7 @@ void overrideTheme(
   // colors
   if (zapPrimary != null) ZapPrimary = zapPrimary;
   if (zapPrimaryDark != null) ZapPrimaryDark = zapPrimaryDark;
+  if (zapPrimaryGradient != null) ZapPrimaryGradient = zapPrimaryGradient;
   if (zapSecondary != null) ZapSecondary = zapSecondary;
   if (zapSecondaryDark != null) ZapSecondaryDark = zapSecondaryDark;
   if (zapSecondaryGradient != null) ZapSecondaryGradient = zapSecondaryGradient;
