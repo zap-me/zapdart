@@ -8,8 +8,7 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:intl_phone_number_input/src/utils/phone_number/phone_number_util.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:zapdart/widgets.dart';
-
+import 'widgets.dart';
 import 'addr_search.dart';
 import 'autocomplete_service.dart';
 import 'form_ui.dart';
@@ -50,6 +49,23 @@ class AccountRequestApiKey {
   final String deviceName;
 
   AccountRequestApiKey(this.email, this.deviceName);
+}
+
+class ColumnView extends StatelessWidget {
+  final Widget? child;
+  final bool scrollChild;
+  final double maxColumnWidth;
+  ColumnView({this.child, this.scrollChild = false, this.maxColumnWidth = 900});
+
+  @override
+  Widget build(BuildContext context) {
+    var center = Center(
+        child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: maxColumnWidth),
+            child: child));
+    if (scrollChild) return SingleChildScrollView(child: center);
+    return center;
+  }
 }
 
 Widget accountImage(String? imgString, String? imgType,
@@ -94,8 +110,9 @@ class AccountImageUpdate extends StatelessWidget {
   final Function(String? img, String imgType) _imageUpdate;
   final String? _imgString;
   final String? _imgType;
+  final double maxColumnWidth;
 
-  AccountImageUpdate(this._imgString, this._imgType, this._imageUpdate)
+  AccountImageUpdate(this._imgString, this._imgType, this._imageUpdate, {this.maxColumnWidth = 900})
       : super();
 
   Future<String?> _imgDataEdited(BuildContext context, XFile file) async {
@@ -120,7 +137,7 @@ class AccountImageUpdate extends StatelessWidget {
       pageBuilder: (context, __, ___) {
         return SizedBox.expand(
             child: Scaffold(
-                body: Column(children: [
+                body: ColumnView(maxColumnWidth: maxColumnWidth, child: Column(children: [
           Expanded(child: imageEditor),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -156,7 +173,7 @@ class AccountImageUpdate extends StatelessWidget {
               ),
             ],
           ),
-        ])));
+        ]))));
       },
     );
     var editorKeyState = editorKey.currentState;
@@ -248,6 +265,7 @@ class AccountRegisterForm extends StatefulWidget {
   final String? locationIqApiKey;
   final bool showCurrentPassword;
   final bool showNewPassword;
+  final double maxColumnWidth;
 
   AccountRegisterForm(this.registration,
       {this.instructions,
@@ -263,7 +281,8 @@ class AccountRegisterForm extends StatefulWidget {
       this.googlePlaceApiKey,
       this.locationIqApiKey,
       this.showCurrentPassword: false,
-      this.showNewPassword: true})
+      this.showNewPassword: true,
+      this.maxColumnWidth: 900})
       : super();
 
   @override
@@ -365,7 +384,7 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
           child: Container(),
           preferredSize: Size(0, 0),
         ),
-        body: SingleChildScrollView(
+        body: ColumnView(scrollChild: true, maxColumnWidth: widget.maxColumnWidth,
             child: Form(
                 key: _formKey,
                 child: Container(
@@ -542,8 +561,9 @@ class AccountLoginForm extends StatefulWidget {
   final AccountLogin? login;
   final String? instructions;
   final bool showTwoFactorCode;
+  final double maxColumnWidth;
 
-  AccountLoginForm(this.login, {this.instructions, this.showTwoFactorCode = false}) : super();
+  AccountLoginForm(this.login, {this.instructions, this.showTwoFactorCode = false, this.maxColumnWidth = 900}) : super();
 
   @override
   AccountLoginFormState createState() {
@@ -575,7 +595,7 @@ class AccountLoginFormState extends State<AccountLoginForm> {
           child: Container(),
           preferredSize: Size(0, 0),
         ),
-        body: Form(
+        body: ColumnView(scrollChild: true, maxColumnWidth: widget.maxColumnWidth, child: Form(
             key: _formKey,
             child: Container(
                 padding: EdgeInsets.all(20),
@@ -634,15 +654,16 @@ class AccountLoginFormState extends State<AccountLoginForm> {
                       },
                     ),
                   ],
-                )))));
+                ))))));
   }
 }
 
 class AccountRequestApiKeyForm extends StatefulWidget {
   final String deviceName;
   final String? instructions;
+  final double maxColumnWidth;
 
-  AccountRequestApiKeyForm(this.deviceName, {this.instructions}) : super();
+  AccountRequestApiKeyForm(this.deviceName, {this.instructions, this.maxColumnWidth = 900}) : super();
 
   @override
   AccountRequestApiKeyFormState createState() {
@@ -669,7 +690,7 @@ class AccountRequestApiKeyFormState extends State<AccountRequestApiKeyForm> {
           child: Container(),
           preferredSize: Size(0, 0),
         ),
-        body: Form(
+        body: ColumnView(scrollChild: true, maxColumnWidth: widget.maxColumnWidth, child: Form(
             key: _formKey,
             child: Container(
                 padding: EdgeInsets.all(20),
@@ -719,14 +740,15 @@ class AccountRequestApiKeyFormState extends State<AccountRequestApiKeyForm> {
                       },
                     ),
                   ],
-                )))));
+                ))))));
   }
 }
 
 class AccountUpdateEmailForm extends StatefulWidget {
   final String? instructions;
+  final double maxColumnWidth;
 
-  AccountUpdateEmailForm({this.instructions}) : super();
+  AccountUpdateEmailForm({this.instructions, this.maxColumnWidth = 900}) : super();
 
   @override
   AccountUpdateEmailFormState createState() {
@@ -752,7 +774,7 @@ class AccountUpdateEmailFormState extends State<AccountUpdateEmailForm> {
           child: Container(),
           preferredSize: Size(0, 0),
         ),
-        body: Form(
+        body: ColumnView(scrollChild: true, maxColumnWidth: widget.maxColumnWidth, child: Form(
             key: _formKey,
             child: Container(
                 padding: EdgeInsets.all(20),
@@ -802,6 +824,6 @@ class AccountUpdateEmailFormState extends State<AccountUpdateEmailForm> {
                       },
                     ),
                   ],
-                )))));
+                ))))));
   }
 }
