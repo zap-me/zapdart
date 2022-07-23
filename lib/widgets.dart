@@ -198,14 +198,14 @@ class RoundedButton extends StatelessWidget {
 }
 
 class SquareButton extends StatelessWidget {
-  SquareButton(this.onPressed, this.icon, this.color, this.title, {this.textColor, this.fontSize, this.textOutside=true, this.borderSize=5.0}) : super();
+  SquareButton(this.onPressed, this.icon, this.color, this.title, {this.textColor, this.fontSize=14, this.textOutside=true, this.borderSize=5.0}) : super();
 
   final VoidCallback onPressed;
   final IconData icon;
   final Color color;
   final String title;
   final Color? textColor;
-  final double? fontSize;
+  final double fontSize;
   final bool textOutside;
   final double borderSize;
 
@@ -227,7 +227,7 @@ class SquareButton extends StatelessWidget {
                   height: 150,
                   alignment: Alignment.center,
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    Icon(icon, color: textColor != null ? textColor : ZapOnSecondary),
+                    Icon(icon, size: fontSize * 2, color: textColor != null ? textColor : ZapOnSecondary),
                     textOutside ? SizedBox() : text
                   ]))
             ),
