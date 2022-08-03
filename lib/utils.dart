@@ -159,16 +159,16 @@ String? parseRecipientOrWavesUri(bool testnet, String data) {
 }
 
 void showAlertDialog(BuildContext context, String msg,
-    {bool showCancel: false, Function()? onCancel}) {
+    {bool showCancel: false, Function()? onCancel, int? maxLines = 3}) {
   var alert = AlertDialog(
       content: Column(mainAxisSize: MainAxisSize.min, children: [
     Row(children: [
       CircularProgressIndicator(),
       SizedBox(width: 10),
-      Flexible(child: Text(msg, maxLines: 3))
+      Flexible(child: Text(msg, maxLines: maxLines))
     ]),
     showCancel
-        ? raisedButton(onPressed: onCancel, child: Text('Cancel'))
+        ? Padding(padding: EdgeInsets.only(top: 10), child: raisedButton(onPressed: onCancel, child: Text('Cancel')))
         : SizedBox()
   ]));
   showDialog(
