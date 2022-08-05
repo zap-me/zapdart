@@ -311,6 +311,10 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
   String? _imgString;
   String? _imgType;
 
+  bool currentPasswordObscureText = true;
+  bool newPasswordObscureText = true;
+  bool confirmPasswordObscureText = true;
+
   @protected
   @mustCallSuper
   void initState() {
@@ -492,9 +496,16 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
                           visible: widget.showCurrentPassword,
                           child: TextFormField(
                               controller: _currentPasswordController,
-                              obscureText: true,
+                              obscureText: currentPasswordObscureText,
                               decoration: InputDecoration(
-                                  labelText: 'Current Password'),
+                                  labelText: 'Current Password',
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      setState(() => currentPasswordObscureText = !currentPasswordObscureText);
+                                    },
+                                    icon: Icon(
+                                        currentPasswordObscureText == true ? Icons.visibility_off : Icons.visibility),
+                                    tooltip: 'Show password')),
                               validator: (value) {
                                 if (value == null || value.isEmpty)
                                   return 'Please enter your current password';
@@ -504,9 +515,16 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
                           visible: widget.showNewPassword,
                           child: TextFormField(
                               controller: _newPasswordController,
-                              obscureText: true,
+                              obscureText: newPasswordObscureText,
                               decoration:
-                                  InputDecoration(labelText: 'New Password'),
+                                  InputDecoration(labelText: 'New Password',
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      setState(() => newPasswordObscureText = !newPasswordObscureText);
+                                    },
+                                    icon: Icon(
+                                        newPasswordObscureText == true ? Icons.visibility_off : Icons.visibility),
+                                    tooltip: 'Show password')),
                               validator: (value) {
                                 if (value == null || value.isEmpty)
                                   return 'Please enter a new password';
@@ -516,9 +534,16 @@ class AccountRegisterFormState extends State<AccountRegisterForm> {
                           visible: widget.showNewPassword,
                           child: TextFormField(
                               controller: _passwordConfirmController,
-                              obscureText: true,
+                              obscureText: confirmPasswordObscureText,
                               decoration: InputDecoration(
-                                  labelText: 'Password Confirmation'),
+                                  labelText: 'Password Confirmation',
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      setState(() => confirmPasswordObscureText = !confirmPasswordObscureText);
+                                    },
+                                    icon: Icon(
+                                        confirmPasswordObscureText == true ? Icons.visibility_off : Icons.visibility),
+                                    tooltip: 'Show password')),
                               validator: (value) {
                                 if (value == null || value.isEmpty)
                                   return 'Please confirm your password';
