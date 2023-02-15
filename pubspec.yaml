@@ -24,17 +24,17 @@ dependencies:
   base58check: ^2.0.0
   retry: ^3.1.0
   decimal: ^2.3.0
-  google_fonts: ^2.1.0
+  google_fonts: ^4.0.3
   universal_platform: ^1.0.0+1
   image_picker: ^0.8.4
   extended_image: ^4.2.1
-  image: ^3.0.2
+  image: ^3.3.0
   intl_phone_number_input: ^0.7.0+2
   debounce_throttle: ^2.0.0
   email_validator: ^2.0.1
   uuid: ^3.0.4
-  flutter_svg: ^1.1.0
-  device_info_plus: ^3.2.1
+  flutter_svg: ^2.0.1
+  device_info_plus: ^8.1.0
 
 flutter:
   assets:
