@@ -27,7 +27,11 @@ dependencies:
   google_fonts: ^4.0.3
   universal_platform: ^1.0.0+1
   image_picker: ^0.8.4
-  extended_image: ^4.2.1
+  #extended_image: ^4.2.1
+  extended_image:
+    git:
+      url: https://github.com/SuaMusica/extended_image.git
+      ref: c3d8cef106524c398c555f4b861fea1078629614
   image: ^3.3.0
   intl_phone_number_input: ^0.7.0+2
   debounce_throttle: ^2.0.0
