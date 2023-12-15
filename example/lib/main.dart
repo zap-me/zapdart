@@ -20,9 +20,9 @@ class MyApp extends StatelessWidget {
         primaryTextTheme: ZapTextThemer(Theme.of(context).textTheme),
         colorScheme: ColorScheme(
           primary: ZapPrimary,
-          primaryVariant: ZapPrimaryDark,
+          primaryContainer: ZapPrimaryDark,
           secondary: ZapSecondary,
-          secondaryVariant: ZapSecondaryDark,
+          secondaryContainer: ZapSecondaryDark,
           surface: ZapSurface,
           background: ZapBackground,
           error: ZapError,
